@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using BrotliSharpLib;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -105,10 +107,60 @@ namespace DLiveTool
                     realLength += result.Count;
                 }
 
-                //这里可能 不止一条数据，要拆包再用
                 Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "receive data" + realData.Take(realLength).Count());
-                
+                //处理接收到的消息
+                HandleReceiveData(realData.Take(realLength).ToArray());
             }
+        }
+
+        /// <summary>
+        /// 处理接收到的消息
+        /// </summary>
+        /// <param name="data">消息数组</param>
+        private void HandleReceiveData(byte[] data)
+        {
+            //子包数据的第一位索引
+            int headIndex = 0;
+
+            while (headIndex < data.Length)
+            {
+                //前四位表示包的长度
+                byte[] packetLengthByte = data.Take(4).ToArray();
+                if (BitConverter.IsLittleEndian)
+                {
+                    packetLengthByte = packetLengthByte.Reverse().ToArray();
+                }
+                //获取包的长度
+                int packetLength = BitConverter.ToInt32(packetLengthByte, 0);
+                //打包
+                Packet packet = new Packet(data.Skip(headIndex).Take(packetLength).ToArray());
+
+                //未压缩，直接使用数据
+                if (packet._header._protocolVersion == ProtocolVersion.UnCompressed)
+                {
+                    HandleDecodedJson(Encoding.UTF8.GetString(packet._packetBody));
+                }
+                //经过压缩，解压后再生成 Packet(可能有多个)
+                else if (packet._header._protocolVersion == ProtocolVersion.Brotli)
+                {
+                    byte[] decompressedData = Brotli.DecompressBuffer(packet._packetBody, 0, packet._packetBody.Length);
+
+                    Console.WriteLine("decompression Length : " + decompressedData.Length);
+                    HandleReceiveData(decompressedData);
+                }
+                //子包第一位索引移动到下一个子包位置，
+                headIndex += packetLength;
+                //这时如果 headIndex >= data.Length,说明没有下一个子包了，处理结束
+            }
+        }
+        /// <summary>
+        /// 处理解包后得到的json字符串
+        /// </summary>
+        /// <param name="json"></param>
+        private void HandleDecodedJson(string json)
+        {
+            Console.WriteLine($"收到消息 : " + json);
+            Console.WriteLine("");
         }
     }
 }

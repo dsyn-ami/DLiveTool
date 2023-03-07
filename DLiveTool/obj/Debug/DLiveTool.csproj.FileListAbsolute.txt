@@ -12,3 +12,7 @@ E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.MainWindow.resources
 E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.csproj.CopyComplete
 E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.exe
 E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.pdb
+E:\project\DLiveTool\DLiveTool\bin\Debug\BrotliSharpLib.dll
+E:\project\DLiveTool\DLiveTool\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+E:\project\DLiveTool\DLiveTool\bin\Debug\BrotliSharpLib.xml
+E:\project\DLiveTool\DLiveTool\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml

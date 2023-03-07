@@ -30,8 +30,7 @@ namespace DLiveTool
         public byte[] _packetBody;
         public Packet(byte[] bytes)
         {
-            var headerBuffer = new ArraySegment<byte>(bytes, 0, PacketHeader._packetHeaderLength);
-            _header = new PacketHeader(headerBuffer);
+            _header = new PacketHeader(bytes.Take(PacketHeader._packetHeaderLength).ToArray());
             var body = new ArraySegment<byte>(bytes, _header._headerLength, _header._bodyLength).ToArray();
             _packetBody = body;
         }
@@ -139,18 +138,28 @@ namespace DLiveTool
         /// 构造方法
         /// </summary>
         /// <param name="bytes">弹幕头16字节</param>
-        public PacketHeader(ArraySegment<byte> bytes)
+        public PacketHeader(byte[] bytes)
         {
-            if (bytes.Count != _packetHeaderLength) throw new ArgumentException("No Supported Protocol Header");
+            if (bytes.Length != _packetHeaderLength) throw new ArgumentException("No Supported Protocol Header");
 
-            var b = bytes.Array;
-
-            //传过来的数组是应当是正常排序（大端排序），故不需要反转直接转换
-            _packetLength = BitConverter.ToInt32(b, 0);
-            _headerLength = BitConverter.ToInt16(b, 4);
-            _protocolVersion = (ProtocolVersion)BitConverter.ToInt16(b, 6);
-            _operation = (Operation)BitConverter.ToInt32(b, 8);
-            _sequenceId = BitConverter.ToInt32(b, 12);
+            if (BitConverter.IsLittleEndian)
+            {
+                bytes = bytes.Reverse().ToArray();
+                _packetLength = BitConverter.ToInt32(bytes, 12);
+                _headerLength = BitConverter.ToInt16(bytes, 10);
+                _protocolVersion = (ProtocolVersion)BitConverter.ToInt16(bytes, 8);
+                _operation = (Operation)BitConverter.ToInt32(bytes, 4);
+                _sequenceId = BitConverter.ToInt32(bytes, 0);
+            }
+            else
+            {
+                _packetLength = BitConverter.ToInt32(bytes, 0);
+                _headerLength = BitConverter.ToInt16(bytes, 4);
+                _protocolVersion = (ProtocolVersion)BitConverter.ToInt16(bytes, 6);
+                _operation = (Operation)BitConverter.ToInt32(bytes, 8);
+                _sequenceId = BitConverter.ToInt32(bytes, 12);
+            }
+            
         }
 
         /// <summary>
