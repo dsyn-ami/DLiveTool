@@ -16,7 +16,7 @@ namespace DLiveTool
         public MainWindow()
         {
             InitializeComponent();
-            _bws.ConnectAsync("8804378");
+            _bws.ConnectAsync("213");
         }
     }
 }

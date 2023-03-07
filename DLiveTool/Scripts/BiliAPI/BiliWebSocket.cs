@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.WebSockets;
 using System.Text;
+using DLiveTool.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,6 +17,13 @@ namespace DLiveTool
 {
     public class BiliWebSocket
     {
+        #region 事件定义
+        /// <summary>
+        /// 收到弹幕
+        /// </summary>
+        public event Action<ReceiveDanmakuMsg> OnReceiveDanmaku;
+        #endregion
+
         ClientWebSocket _ws;
         CancellationTokenSource _tokenSource = new CancellationTokenSource();
         Uri _uri = new Uri(BiliAPI.LiveWebSocketUrl);
@@ -125,14 +133,20 @@ namespace DLiveTool
             while (headIndex < data.Length)
             {
                 //前四位表示包的长度
-                byte[] packetLengthByte = data.Take(4).ToArray();
+                byte[] packetLengthByte = data.Skip(headIndex).Take(4).ToArray();
                 if (BitConverter.IsLittleEndian)
                 {
                     packetLengthByte = packetLengthByte.Reverse().ToArray();
                 }
                 //获取包的长度
                 int packetLength = BitConverter.ToInt32(packetLengthByte, 0);
+
                 //打包
+                byte[] dataa = data.Skip(headIndex).Take(packetLength).ToArray();
+                if (dataa[0] > 1)
+                {
+                    int a = 1;
+                }
                 Packet packet = new Packet(data.Skip(headIndex).Take(packetLength).ToArray());
 
                 //未压缩，直接使用数据
@@ -161,6 +175,17 @@ namespace DLiveTool
         {
             Console.WriteLine($"收到消息 : " + json);
             Console.WriteLine("");
+
+            ReceiveMsg msg = new ReceiveMsg(json);
+            switch (msg.CMD)
+            {
+                case "DANMU_MSG":
+                    ReceiveDanmakuMsg receiveDanmakuMsg = new ReceiveDanmakuMsg(json);
+                    OnReceiveDanmaku?.Invoke(receiveDanmakuMsg);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

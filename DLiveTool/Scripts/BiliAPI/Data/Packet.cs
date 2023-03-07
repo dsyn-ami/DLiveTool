@@ -31,7 +31,7 @@ namespace DLiveTool
         public Packet(byte[] bytes)
         {
             _header = new PacketHeader(bytes.Take(PacketHeader._packetHeaderLength).ToArray());
-            var body = new ArraySegment<byte>(bytes, _header._headerLength, _header._bodyLength).ToArray();
+            byte[] body = bytes.Skip(PacketHeader._packetHeaderLength).ToArray();
             _packetBody = body;
         }
         public Packet(Operation operation, byte[] body = null)

@@ -69,6 +69,8 @@
     <Compile Include="Scripts\BiliAPI\BiliWebSocket.cs" />
     <Compile Include="Scripts\BiliAPI\Data\AnchorData.cs" />
     <Compile Include="Scripts\BiliAPI\Data\Packet.cs" />
+    <Compile Include="Scripts\BiliAPI\Data\WebSocketData\ReceiveDanmakuMsg.cs" />
+    <Compile Include="Scripts\BiliAPI\Data\WebSocketData\ReceiveMsg.cs" />
     <Compile Include="Scripts\Framework\EventValue.cs" />
     <Compile Include="Scripts\Test\SendDanmaku.cs" />
     <Compile Include="Scripts\Test\TestAudio.cs" />
