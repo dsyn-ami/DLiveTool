@@ -1,0 +1,14 @@
+E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.csproj.AssemblyReference.cache
+E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.csproj.SuggestedBindingRedirects.cache
+E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.Properties.Resources.resources
+E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.csproj.GenerateResource.cache
+E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.csproj.CoreCompileInputs.cache
+E:\project\DLiveTool\DLiveTool\bin\Debug\DLiveTool.exe.config
+E:\project\DLiveTool\DLiveTool\bin\Debug\DLiveTool.exe
+E:\project\DLiveTool\DLiveTool\bin\Debug\DLiveTool.pdb
+E:\project\DLiveTool\DLiveTool\bin\Debug\Newtonsoft.Json.dll
+E:\project\DLiveTool\DLiveTool\bin\Debug\Newtonsoft.Json.xml
+E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.MainWindow.resources
+E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.csproj.CopyComplete
+E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.exe
+E:\project\DLiveTool\DLiveTool\obj\Debug\DLiveTool.pdb
