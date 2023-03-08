@@ -24,8 +24,8 @@ namespace DLiveTool.Data
             0,
             5, X不是用户等级
             "#1453BAFF,#4C2263A2,#3353BAFF",用户等级颜色
-            0,
-            "{}",
+            0,//弹幕类型 0 普通弹幕 1 表情图片
+            "{}",//表情图片信息
             "{}"
         ],
         "虽然是我们打sc逼着她说的", 弹幕内容
@@ -84,16 +84,38 @@ namespace DLiveTool.Data
 
     public class ReceiveDanmakuMsg
     {
+        /// <summary>
+        /// 弹幕类型
+        /// </summary>
+        public enum DanmakuType
+        {
+            //文本弹幕
+            Text = 0,
+            //图片表情弹幕
+            ImgEmoticon = 1,
+        }
         public string UserId { get; private set; }
         public string UserName { get; private set; }
         public string Message { get; private set; }
+        public DanmakuType Type { get; private set; }
+        /// <summary>
+        /// 表情数据，如果弹幕类型不是 图片表情 类型，该项为空
+        /// </summary>
+        public EmoticonData Emoticon { get; private set; }
 
         public ReceiveDanmakuMsg(string json)
         {
             JObject jo = JObject.Parse(json);
-            UserId = jo["info"][3][0].ToString();
-            UserName = jo["info"][3][1].ToString();
-            Message = jo["info"][2].ToString();
+            UserId = jo["info"][2][0].ToString();
+            UserName = jo["info"][2][1].ToString();
+            Message = jo["info"][1].ToString();
+            Type = (DanmakuType)(int)jo["info"][0][12];
+
+            if(Type == DanmakuType.ImgEmoticon)
+            {
+                string emoticonJson = jo["info"][0][13].ToString();
+                Emoticon = new EmoticonData(emoticonJson);
+            }
         }
     }
 }

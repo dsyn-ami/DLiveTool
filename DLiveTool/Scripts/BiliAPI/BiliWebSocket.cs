@@ -151,10 +151,7 @@ namespace DLiveTool
 
                 //打包
                 byte[] dataa = data.Skip(headIndex).Take(packetLength).ToArray();
-                if (dataa[0] > 1)
-                {
-                    int a = 1;
-                }
+
                 Packet packet = new Packet(data.Skip(headIndex).Take(packetLength).ToArray());
 
                 //未压缩，直接使用数据
