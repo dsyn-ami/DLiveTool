@@ -1,4 +1,9 @@
+# Hiden Folder
+DLiveTool/.vs/
+
 # Build and Object Folders
 DLiveTool/bin/
 DLiveTool/obj/
+
+*csproj
 

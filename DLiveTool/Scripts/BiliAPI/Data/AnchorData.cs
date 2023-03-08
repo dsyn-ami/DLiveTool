@@ -55,5 +55,9 @@ namespace DLiveTool
         /// 直播间有多少人看过
         /// </summary>
         public static EventValue<int> WatchedCount;
+        /// <summary>
+        /// 在线高能榜用户数量
+        /// </summary>
+        public static EventValue<int> OnlineRankCount;
     }
 }

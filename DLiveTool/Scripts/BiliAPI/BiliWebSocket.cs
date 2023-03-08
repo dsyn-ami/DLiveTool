@@ -22,6 +22,14 @@ namespace DLiveTool
         /// 收到弹幕
         /// </summary>
         public event Action<ReceiveDanmakuMsg> OnReceiveDanmaku;
+        /// <summary>
+        /// 高能榜用户数量刷新
+        /// </summary>
+        public event Action<ReceiveOnlineRankChange> OnReceiveOnlineRankChange;
+        /// <summary>
+        /// 看过的人数量刷新
+        /// </summary>
+        public event Action<ReceiveWatchedChanged> OnReceiveWatchedChanged;
         #endregion
 
         ClientWebSocket _ws;
@@ -41,7 +49,7 @@ namespace DLiveTool
             AnchorData.RoomId.Value = jObj["data"]["room_id"]?.ToString(); 
             AnchorData.UserId.Value = jObj["data"]["uid"]?.ToString();
             AnchorData.ShotRoomId.Value = jObj["data"]["short_id"]?.ToString();
-            Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "获取房间基本信息 : " + AnchorData.RoomId.Value);
+            Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "获取房间基本信息 : " + roomInfo);
 
             //获取主播基本信息
             string userInfo = await BiliRequester.GetUserInfo(AnchorData.UserId.Value);
@@ -96,7 +104,7 @@ namespace DLiveTool
             //接受消息的临时缓存
             byte[] buffer = new byte[2048];
             //存储一条完整的消息
-            byte[] realData = new byte[2048 * 4];
+            byte[] realData = new byte[2048 * 8];
             //完整消息的实际长度
             int realLength = 0;
             while (_ws != null && _ws.State == WebSocketState.Open)
@@ -179,9 +187,22 @@ namespace DLiveTool
             ReceiveMsg msg = new ReceiveMsg(json);
             switch (msg.CMD)
             {
+                //收到弹幕
                 case "DANMU_MSG":
                     ReceiveDanmakuMsg receiveDanmakuMsg = new ReceiveDanmakuMsg(json);
                     OnReceiveDanmaku?.Invoke(receiveDanmakuMsg);
+                    break;
+                //高能榜在线观众刷新
+                case "ONLINE_RANK_COUNT":
+                    ReceiveOnlineRankChange receiveOnlineRankChange = new ReceiveOnlineRankChange(json);
+                    AnchorData.OnlineRankCount.Value = receiveOnlineRankChange.OnRankUserCount;
+                    OnReceiveOnlineRankChange?.Invoke(receiveOnlineRankChange);
+                    break;
+                //看过的人数量刷新
+                case "WATCHED_CHANGE":
+                    ReceiveWatchedChanged receiveWatchedChanged = new ReceiveWatchedChanged(json);
+                    AnchorData.WatchedCount.Value = receiveWatchedChanged.WatchedCount;
+                    OnReceiveWatchedChanged?.Invoke(receiveWatchedChanged);
                     break;
                 default:
                     break;
