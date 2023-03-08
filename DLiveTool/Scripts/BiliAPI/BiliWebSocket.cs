@@ -202,6 +202,7 @@ namespace DLiveTool
                     OnReceiveWatchedChanged?.Invoke(receiveWatchedChanged);
                     break;
                 default:
+                    BiliMsgWriter.RecordMsg(msg.CMD, json);
                     break;
             }
         }
