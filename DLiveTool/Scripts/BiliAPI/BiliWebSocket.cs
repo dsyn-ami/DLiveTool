@@ -19,17 +19,33 @@ namespace DLiveTool
     {
         #region 事件定义
         /// <summary>
+        /// 观众进入直播间
+        /// </summary>
+        public event Action<ReceiveInterAct> OnUserEnter;
+        /// <summary>
         /// 收到弹幕
         /// </summary>
         public event Action<ReceiveDanmakuMsg> OnReceiveDanmaku;
         /// <summary>
+        /// 收到礼物
+        /// </summary>
+        public event Action<ReceiveSendGift> OnReceiveGift;
+        /// <summary>
         /// 高能榜用户数量刷新
         /// </summary>
-        public event Action<ReceiveOnlineRankChange> OnReceiveOnlineRankChange;
+        public event Action<ReceiveOnlineRankChange> OnOnlineRankChange;
         /// <summary>
         /// 看过的人数量刷新
         /// </summary>
-        public event Action<ReceiveWatchedChanged> OnReceiveWatchedChanged;
+        public event Action<ReceiveWatchedChanged> OnWatchedChanged;
+        /// <summary>
+        /// 有人点赞了
+        /// </summary>
+        public event Action<ReceiveLikeClick> OnLikeClick;
+        /// <summary>
+        /// 点赞数更新
+        /// </summary>
+        public event Action<ReceiveLikeUpdate> OnLikeUpdate;
         #endregion
 
         ClientWebSocket _ws;
@@ -85,7 +101,7 @@ namespace DLiveTool
         {
             while (_ws != null && _ws.State == WebSocketState.Open) //发送心跳包保持连接
             {
-                byte[] beatHeartData = Packet._heartBeatPacket.ToBytes();
+                byte[] beatHeartData = Packet.HeatBeat.ToBytes();
                 string s = "";
                 foreach (byte b in beatHeartData)
                 {
@@ -155,14 +171,14 @@ namespace DLiveTool
                 Packet packet = new Packet(data.Skip(headIndex).Take(packetLength).ToArray());
 
                 //未压缩，直接使用数据
-                if (packet._header._protocolVersion == ProtocolVersion.UnCompressed)
+                if (packet.Header._protocolVersion == ProtocolVersion.UnCompressed)
                 {
-                    HandleDecodedJson(Encoding.UTF8.GetString(packet._packetBody));
+                    HandleDecodedJson(Encoding.UTF8.GetString(packet.Body));
                 }
                 //经过压缩，解压后再生成 Packet(可能有多个)
-                else if (packet._header._protocolVersion == ProtocolVersion.Brotli)
+                else if (packet.Header._protocolVersion == ProtocolVersion.Brotli)
                 {
-                    byte[] decompressedData = Brotli.DecompressBuffer(packet._packetBody, 0, packet._packetBody.Length);
+                    byte[] decompressedData = Brotli.DecompressBuffer(packet.Body, 0, packet.Body.Length);
 
                     Console.WriteLine("decompression Length : " + decompressedData.Length);
                     HandleReceiveData(decompressedData);
@@ -184,22 +200,43 @@ namespace DLiveTool
             ReceiveMsg msg = new ReceiveMsg(json);
             switch (msg.CMD)
             {
+                //进入直播间
+                case "INTERACT_WORD":
+                    ReceiveInterAct receiveInterAct = new ReceiveInterAct(json);
+                    OnUserEnter?.Invoke(receiveInterAct);
+                    break;
                 //收到弹幕
                 case "DANMU_MSG":
                     ReceiveDanmakuMsg receiveDanmakuMsg = new ReceiveDanmakuMsg(json);
                     OnReceiveDanmaku?.Invoke(receiveDanmakuMsg);
                     break;
+                //收到礼物
+                case "SEND_GIFT":
+                    ReceiveSendGift receiveSendGift = new ReceiveSendGift(json);
+                    OnReceiveGift?.Invoke(receiveSendGift);
+                    break;
                 //高能榜在线观众刷新
                 case "ONLINE_RANK_COUNT":
                     ReceiveOnlineRankChange receiveOnlineRankChange = new ReceiveOnlineRankChange(json);
                     AnchorData.OnlineRankCount.Value = receiveOnlineRankChange.OnRankUserCount;
-                    OnReceiveOnlineRankChange?.Invoke(receiveOnlineRankChange);
+                    OnOnlineRankChange?.Invoke(receiveOnlineRankChange);
                     break;
                 //看过的人数量刷新
                 case "WATCHED_CHANGE":
                     ReceiveWatchedChanged receiveWatchedChanged = new ReceiveWatchedChanged(json);
                     AnchorData.WatchedCount.Value = receiveWatchedChanged.WatchedCount;
-                    OnReceiveWatchedChanged?.Invoke(receiveWatchedChanged);
+                    OnWatchedChanged?.Invoke(receiveWatchedChanged);
+                    break;
+                //有观众点赞了
+                case "LIKE_INFO_V3_CLICK":
+                    ReceiveLikeClick receiveLikeClick = new ReceiveLikeClick(json);
+                    OnLikeClick?.Invoke(receiveLikeClick);
+                    break;
+                //点赞数量更新
+                case "LIKE_INFO_V3_UPDATE":
+                    ReceiveLikeUpdate receiveLikeUpdate = new ReceiveLikeUpdate(json);
+                    AnchorData.LikeCount.Value = receiveLikeUpdate.LikeCount;
+                    OnLikeUpdate?.Invoke(receiveLikeUpdate);
                     break;
                 default:
                     BiliMsgWriter.RecordMsg(msg.CMD, json);

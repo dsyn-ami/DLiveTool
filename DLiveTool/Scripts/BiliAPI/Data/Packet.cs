@@ -11,9 +11,9 @@ namespace DLiveTool
         /// <summary>
         /// 心跳包
         /// </summary>
-        public static readonly Packet _heartBeatPacket = new Packet()
+        public static readonly Packet HeatBeat = new Packet()
         {
-            _header = new PacketHeader()
+            Header = new PacketHeader()
             {
                 _headerLength = PacketHeader._packetHeaderLength,
                 _sequenceId = 1,
@@ -23,20 +23,20 @@ namespace DLiveTool
             }
         };
 
-        public PacketHeader _header;
+        public PacketHeader Header;
 
-        public int Length => _header._packetLength;
+        public int Length => Header._packetLength;
 
-        public byte[] _packetBody;
+        public byte[] Body;
         public Packet(byte[] bytes)
         {
-            _header = new PacketHeader(bytes.Take(PacketHeader._packetHeaderLength).ToArray());
+            Header = new PacketHeader(bytes.Take(PacketHeader._packetHeaderLength).ToArray());
             byte[] body = bytes.Skip(PacketHeader._packetHeaderLength).ToArray();
-            _packetBody = body;
+            Body = body;
         }
         public Packet(Operation operation, byte[] body = null)
         {
-            _header = new PacketHeader
+            Header = new PacketHeader
             {
                 _operation = operation,
                 _protocolVersion = ProtocolVersion.UnCompressed,
@@ -44,19 +44,19 @@ namespace DLiveTool
                 _headerLength = PacketHeader._packetHeaderLength,
                 _sequenceId = 1
             };
-            _packetBody = body;
+            Body = body;
         }
 
         public byte[] ToBytes()
         {
-            if (_packetBody != null)
-                _header._packetLength = _header._headerLength + _packetBody.Length;
+            if (Body != null)
+                Header._packetLength = Header._headerLength + Body.Length;
             else
-                _header._packetLength = _header._headerLength;
-            var arr = new byte[_header._packetLength];
-            Array.Copy(_header.ToBytes(), arr, _header._headerLength);
-            if (_packetBody != null)
-                Array.Copy(_packetBody, 0, arr, _header._headerLength, _packetBody.Length);
+                Header._packetLength = Header._headerLength;
+            var arr = new byte[Header._packetLength];
+            Array.Copy(Header.ToBytes(), arr, Header._headerLength);
+            if (Body != null)
+                Array.Copy(Body, 0, arr, Header._headerLength, Body.Length);
             return arr;
         }
 
@@ -77,10 +77,10 @@ namespace DLiveTool
         /// <returns>心跳包</returns>
         public static Packet HeartBeat(byte[] msg = null)
         {
-            if (msg == null) return _heartBeatPacket;
+            if (msg == null) return HeatBeat;
             return new Packet()
             {
-                _header = new PacketHeader()
+                Header = new PacketHeader()
                 {
                     _packetLength = PacketHeader._packetHeaderLength + msg.Length,
                     _protocolVersion = ProtocolVersion.HeartBeat,
@@ -88,7 +88,7 @@ namespace DLiveTool
                     _sequenceId = 1,
                     _headerLength = PacketHeader._packetHeaderLength
                 },
-                _packetBody = msg
+                Body = msg
             };
         }
 
@@ -105,7 +105,7 @@ namespace DLiveTool
 
             return new Packet
             {
-                _header = new PacketHeader
+                Header = new PacketHeader
                 {
                     _operation = Operation.Authority,
                     _protocolVersion = ProtocolVersion.HeartBeat,
@@ -113,7 +113,7 @@ namespace DLiveTool
                     _headerLength = PacketHeader._packetHeaderLength,
                     _packetLength = PacketHeader._packetHeaderLength + obj.Length
                 },
-                _packetBody = obj
+                Body = obj
             };
         }
     }
@@ -177,8 +177,8 @@ namespace DLiveTool
 
             //如果当前系统是小端排序，即低位字节存储在内存的低地址端，高位字节存储在内存的高地址端。
             //那么应该将 byte数组 反转后使用
-            //如 Int32(257) 小端排序系统中转换成 byte数组 是 [1, 1, 0, 0]
-            //必要时需要反转成 [0, 0, 1, 1] 以便使用
+            //如 Int32(258) 小端排序系统中转换成 byte数组 是 [2, 1, 0, 0]
+            //必要时需要反转成 [0, 0, 1, 2] 以便使用
             //大多数系统都是小端排序
             if (BitConverter.IsLittleEndian)
             {

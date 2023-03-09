@@ -16,8 +16,7 @@ namespace DLiveTool
         public MainWindow()
         {
             InitializeComponent();
-            _bws.ConnectAsync("923833");
-            Console.WriteLine("pathRoot : " + System.AppDomain.CurrentDomain.BaseDirectory);
+            _bws.ConnectAsync("24466439");
         }
     }
 }

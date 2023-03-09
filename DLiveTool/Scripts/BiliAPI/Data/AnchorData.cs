@@ -56,6 +56,10 @@ namespace DLiveTool
         /// </summary>
         public static EventValue<int> WatchedCount;
         /// <summary>
+        /// 直播间点赞数量
+        /// </summary>
+        public static EventValue<int> LikeCount;
+        /// <summary>
         /// 在线高能榜用户数量
         /// </summary>
         public static EventValue<int> OnlineRankCount;
