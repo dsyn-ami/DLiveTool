@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DLiveTool.Data;
 
 namespace DLiveTool
 {
@@ -23,6 +24,12 @@ namespace DLiveTool
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void OpenBtn_Click(object sender, RoutedEventArgs e)
+        {
+            DanmakuWindow danmakuWindow = new DanmakuWindow();
+            danmakuWindow.Show();
         }
     }
 }
