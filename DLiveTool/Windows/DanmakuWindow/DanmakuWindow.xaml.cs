@@ -29,26 +29,50 @@ namespace DLiveTool
             
             _model = new DanmakuWindowDataModel(_mainPanel);
 
+            _anim.Completed += Anim_Completed;
+
             _biliWS = new BiliWebSocket();
             _biliWS.ConnectAsync("21263282");
             _biliWS.OnReceiveDanmaku += ShowDanmakuMsg;
         }
 
+        private void Anim_Completed(object sender, EventArgs e)
+        {
+            if(_msgQueue.Count > 0)
+            {
+                var data = _msgQueue.Dequeue();
+                ShowDanmakuMsgText(data.UserName, data.Message);
+            }
+            else
+            {
+                _isAniming = false;
+            }
+        }
+
         private void ShowDanmakuMsg(ReceiveDanmakuMsg msgData)
         {
-            string name = msgData.UserName;
-            string msg = msgData.Message;
-            ShowDanmakuMsgText(name, msg);
+            _msgQueue.Enqueue(msgData);
+
+            if (!_isAniming)
+            {
+                var data = _msgQueue.Dequeue();
+                ShowDanmakuMsgText(data.UserName, data.Message);
+            }
         }
+
+        bool _isAniming = false;
+        DoubleAnimation _anim = new DoubleAnimation();
+
+        Queue<ReceiveDanmakuMsg> _msgQueue = new Queue<ReceiveDanmakuMsg>();
 
         private void ShowDanmakuMsgText(string name, string msg)
         {
             //用户名文本
             Run nameRun = new Run(name + " ");
-            nameRun.Foreground = new SolidColorBrush(Colors.Red);
+            nameRun.Foreground = Brushes.Blue;
             //消息文本
             Run msgRun = new Run(msg);
-            msgRun.Foreground = new SolidColorBrush(Colors.Black);
+            msgRun.Foreground = Brushes.Black;
 
             //段落类
             Paragraph para = new Paragraph();
@@ -72,6 +96,12 @@ namespace DLiveTool
             box.Background = new SolidColorBrush(Color.FromArgb(0, 1, 1, 1));
             //添加到父节点上
             _mainPanel.Children.Add(box);
+
+            _anim.From = 33.5;
+            _anim.To = 0;
+            _anim.Duration = TimeSpan.FromMilliseconds(450);
+            rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
+            _isAniming = true;
 
             //保存到数据结构中
             _model.AddRichTexBox(box);
