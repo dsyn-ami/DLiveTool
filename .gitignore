@@ -4,7 +4,8 @@ DLiveTool/.vs/
 # Build and Object Folders
 DLiveTool/bin/
 DLiveTool/obj/
+DLiveTool/[Pp]roperties/
+DLiveTool//[Pp]ackages/
 
-*.csproj
-*.csproj.user
+*.user
 
