@@ -91,6 +91,7 @@ namespace DLiveTool
             flowDocument.Blocks.Add(para);
             
             RichTextBox box = new RichTextBox();
+            box.BorderThickness = new Thickness(0);
             //FlowDocument 加到 RichTexBox子结点上
             box.Document = flowDocument;
             box.Background = new SolidColorBrush(Color.FromArgb(0, 1, 1, 1));

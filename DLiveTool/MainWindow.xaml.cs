@@ -29,6 +29,7 @@ namespace DLiveTool
         private void OpenBtn_Click(object sender, RoutedEventArgs e)
         {
             DanmakuWindow danmakuWindow = new DanmakuWindow();
+            danmakuWindow.Owner = this;
             danmakuWindow.Show();
         }
     }
