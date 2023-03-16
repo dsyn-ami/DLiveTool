@@ -18,16 +18,7 @@
             <StackPanel.RenderTransform>
                 <TranslateTransform x:Name="rootTrans"/>
             </StackPanel.RenderTransform>
-            <RichTextBox Background="Transparent" BorderThickness="0">
-                <FlowDocument FontSize="25" Foreground="Black" Background="Transparent">
-                    <Paragraph LineHeight="25" Foreground="Black" Background="Transparent">
-                        <Run Foreground="Red" xml:space="preserve">名字</Run>
-                        <Run Foreground="Black">测试测字测试测试文字</Run>
-                        <Image Height="25" Width="25" Stretch="Fill" Source="C:/Users/dsyn/Desktop/2.png"/>
-                    </Paragraph>
-                </FlowDocument>
-            </RichTextBox>
-            <RichTextBox Background="Transparent" BorderThickness="0">
+            <!--<RichTextBox Background="Transparent" BorderThickness="0">
                 <FlowDocument FontSize="25" Foreground="Black" Background="Transparent">
                     <Paragraph LineHeight="25" Foreground="Black" Background="Transparent">
                         <Run Foreground="Red" xml:space="preserve">名字</Run>
@@ -35,7 +26,7 @@
                         <Image Height="25" Width="25" Stretch="Fill" Source="C:/Users/dsyn/Desktop/2.png"/>
                     </Paragraph>
                 </FlowDocument>
-            </RichTextBox>
+            </RichTextBox>-->
         </StackPanel>
     </Grid>
 </Window>

@@ -9,16 +9,34 @@ namespace DLiveTool
 {
     public class DanmakuWindowDataModel
     {
-        StackPanel _patentPanel;
-        int _maxItemCount = 20;
-        List<RichTextBox> _items = new List<RichTextBox>();
-
-
         public DanmakuWindowDataModel(StackPanel parentPanel)
         {
             _patentPanel = parentPanel;
         }
 
+        StackPanel _patentPanel;
+        int _maxItemCount = 20;
+        List<RichTextBox> _items = new List<RichTextBox>();
+
+        private int _fontSize = 15;
+        /// <summary>
+        /// 字体大小
+        /// </summary>
+        public int FontSize
+        {
+            get { return _fontSize; }
+            set { _fontSize = value; }
+        }
+
+        private int _linePadding = 10;
+        /// <summary>
+        /// 行距
+        /// </summary>
+        public int LinePadding
+        {
+            get { return _linePadding; }
+            set { _linePadding = value; }
+        }
 
         public void AddRichTexBox(RichTextBox box)
         {
