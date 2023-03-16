@@ -12,7 +12,7 @@ namespace DLiveTool
     /// </summary>
     public class BiliMsgWriter
     {
-        static string _rootPath = AppDomain.CurrentDomain.BaseDirectory;
+        static string _rootPath = DPath.RootPath;
 
         /// <summary>
         /// 用于记录未处理的消息

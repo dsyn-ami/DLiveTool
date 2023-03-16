@@ -239,9 +239,10 @@ namespace DLiveTool
                     OnLikeUpdate?.Invoke(receiveLikeUpdate);
                     break;
                 default:
-                    BiliMsgWriter.RecordMsg(msg.CMD, json);
+                    
                     break;
             }
+            BiliMsgWriter.RecordMsg(msg.CMD, json);
         }
     }
 }

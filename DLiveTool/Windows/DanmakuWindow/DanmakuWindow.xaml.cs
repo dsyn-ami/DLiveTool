@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using DLiveTool.Data;
 using System.Windows.Media.Animation;
+using dsyn;
 
 namespace DLiveTool
 {
@@ -60,7 +61,7 @@ namespace DLiveTool
             if (!_isAniming)
             {
                 var data = _msgQueue.Dequeue();
-                ShowDanmakuMsg(data);
+                ShowDanmakuMsgAsync(data);
             }
         }
 
@@ -78,14 +79,38 @@ namespace DLiveTool
         /// 展示一条弹幕消息
         /// </summary>
         /// <param name="msgData"></param>
-        private void ShowDanmakuMsg(ReceiveDanmakuMsg msgData)
+        private async void ShowDanmakuMsgAsync(ReceiveDanmakuMsg msgData)
         {
-            _msgQueue.Enqueue(msgData);
-
             if (!_isAniming)
             {
-                var data = _msgQueue.Dequeue();
-                ShowDanmakuMsgText(data.UserName, data.Message);
+                //动画锁开启
+                _isAniming = true;
+                var data = msgData;
+
+                if(/*data.Type == ReceiveDanmakuMsg.DanmakuType.Text*/true)
+                {
+                    ShowDanmakuMsgText(data.UserName, data.Message);
+                }
+                //else if(data.Type == ReceiveDanmakuMsg.DanmakuType.ImgEmoticon)
+                //{
+                //    //本地有读取本地缓存
+                    
+                    
+                //    //本地没有缓存,下载,并写入本地缓存
+                //    System.Net.HttpWebResponse response = await BiliRequester.HttpGet(data.Emoticon.ImgUrl);
+                //    byte[] buffer = new byte[response.ContentLength];
+
+                //    int count = (int)response.ContentLength;
+                //    var stream = response.GetResponseStream();
+                //    await stream.ReadAsync(buffer, 0, count);
+                //    stream.Dispose();
+                //    //response.GetResponseStream().Read(buffer, 0, (int)response.ContentLength);
+                //    string fileName = data.Emoticon.ImgUrl.Split("/").Last();
+                //    string path = System.IO.Path.Combine(DPath.EmoticonCachePath, fileName);
+                //    bool isSuccess = FileWriter.WriteFile(path, buffer);
+                //    ShowDanmakuMsgEmoticon(data.UserName, path);
+                //}
+                
             }
         }
 
@@ -125,8 +150,54 @@ namespace DLiveTool
             //保存到数据结构中
             _model.AddRichTexBox(box);
 
-            //动画锁开启
-            _isAniming = true;
+            
+            box.Loaded += (s, e) =>
+            {
+                //组件加载完成后播放动画
+                _anim.From = box.ActualHeight;
+                _anim.To = 0;
+                _anim.Duration = TimeSpan.FromMilliseconds(350);
+                rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
+            };
+        }
+        private void ShowDanmakuMsgEmoticon(string name, string emoticonPath)
+        {
+            //用户名文本
+            Run nameRun = new Run(name + "\u00A0");
+            nameRun.Foreground = Brushes.Blue;
+            //表情图片
+            Image emoticonImg = new Image();
+            emoticonImg.Source = new BitmapImage(new Uri(emoticonPath, UriKind.Absolute));
+            emoticonImg.Height = _model.FontSize;
+
+            //段落类
+            Paragraph para = new Paragraph();
+            para.LineHeight = _model.FontSize + _model.LinePadding;
+            para.Background = Brushes.Transparent;
+            //文本添加到段落类子节点上
+            para.Inlines.Add(nameRun);
+            para.Inlines.Add(emoticonImg);
+
+            //FlowDocument类
+            FlowDocument flowDocument = new FlowDocument();
+            flowDocument.FontSize = _model.FontSize;
+            flowDocument.Background = Brushes.Transparent;
+            //段落类 加到FlowDocument类子节点上
+            flowDocument.Blocks.Add(para);
+
+            RichTextBox box = new RichTextBox();
+            //关闭边框
+            box.BorderThickness = new Thickness(0);
+            //FlowDocument 加到 RichTexBox子结点上
+            box.Document = flowDocument;
+            box.Background = Brushes.Transparent;
+            //添加到父节点上
+            _mainPanel.Children.Add(box);
+
+            //保存到数据结构中
+            _model.AddRichTexBox(box);
+
+
             box.Loaded += (s, e) =>
             {
                 //组件加载完成后播放动画

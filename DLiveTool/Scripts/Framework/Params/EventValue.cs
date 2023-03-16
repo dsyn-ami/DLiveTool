@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DLiveTool
+namespace dsyn
 {
     /// <summary>
     /// 当值发生改变后，会触发事件
