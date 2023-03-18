@@ -18,7 +18,7 @@ namespace DLiveTool
         int _maxItemCount = 20;
         List<RichTextBox> _items = new List<RichTextBox>();
 
-        private int _fontSize = 15;
+        private int _fontSize = 18;
         /// <summary>
         /// 字体大小
         /// </summary>

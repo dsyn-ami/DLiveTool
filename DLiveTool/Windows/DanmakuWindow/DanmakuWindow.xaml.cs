@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using DLiveTool.Data;
 using System.Windows.Media.Animation;
 using dsyn;
+using System.IO;
 
 namespace DLiveTool
 {
@@ -33,7 +34,7 @@ namespace DLiveTool
             _anim.Completed += Anim_Completed;
 
             _biliWS = new BiliWebSocket();
-            _biliWS.ConnectAsync("690");
+            _biliWS.ConnectAsync("6136246");
             _biliWS.OnReceiveDanmaku += AddDanmakuMsgToQueue;
         }
 
@@ -87,30 +88,35 @@ namespace DLiveTool
                 _isAniming = true;
                 var data = msgData;
 
-                if(/*data.Type == ReceiveDanmakuMsg.DanmakuType.Text*/true)
+                if (data.Type == ReceiveDanmakuMsg.DanmakuType.Text)
                 {
                     ShowDanmakuMsgText(data.UserName, data.Message);
                 }
-                //else if(data.Type == ReceiveDanmakuMsg.DanmakuType.ImgEmoticon)
-                //{
-                //    //本地有读取本地缓存
-                    
-                    
-                //    //本地没有缓存,下载,并写入本地缓存
-                //    System.Net.HttpWebResponse response = await BiliRequester.HttpGet(data.Emoticon.ImgUrl);
-                //    byte[] buffer = new byte[response.ContentLength];
+                else if (data.Type == ReceiveDanmakuMsg.DanmakuType.ImgEmoticon)
+                {
+                    string fileName = data.Emoticon.ImgUrl.Split("/").Last();
+                    string path = System.IO.Path.Combine(DPath.EmoticonCachePath, fileName);
 
-                //    int count = (int)response.ContentLength;
-                //    var stream = response.GetResponseStream();
-                //    await stream.ReadAsync(buffer, 0, count);
-                //    stream.Dispose();
-                //    //response.GetResponseStream().Read(buffer, 0, (int)response.ContentLength);
-                //    string fileName = data.Emoticon.ImgUrl.Split("/").Last();
-                //    string path = System.IO.Path.Combine(DPath.EmoticonCachePath, fileName);
-                //    bool isSuccess = FileWriter.WriteFile(path, buffer);
-                //    ShowDanmakuMsgEmoticon(data.UserName, path);
-                //}
-                
+                    //如果本地没有缓存,先下载图片,并写入本地缓存
+                    if (string.IsNullOrEmpty(DCache.GetImageCache(fileName)))
+                    {
+                        System.Net.HttpWebResponse response = await BiliRequester.HttpGet(data.Emoticon.ImgUrl);
+                        //读取字节流,并写入本地文件
+
+                        using (Stream stream = response.GetResponseStream())
+                        {
+                            bool isSuccess = await FileWriter.WriteFileAsync(path, stream);
+                            if (!isSuccess)
+                            {
+                                _isAniming = false;
+                                return;
+                            }
+                        }
+                    }
+
+                    ShowDanmakuMsgEmoticon(data.UserName, path, data.Emoticon.Height);
+                }
+
             }
         }
 
@@ -118,6 +124,7 @@ namespace DLiveTool
         {
             //用户名文本
             Run nameRun = new Run(name + "\u00A0");
+            
             nameRun.Foreground = Brushes.Blue;
             //消息文本
             Run msgRun = new Run(msg);
@@ -125,7 +132,7 @@ namespace DLiveTool
 
             //段落类
             Paragraph para = new Paragraph();
-            para.LineHeight = _model.FontSize + _model.LinePadding;
+            para.LineHeight = _model.FontSize;
             para.Background = Brushes.Transparent;
             //文本添加到段落类子节点上
             para.Inlines.Add(nameRun);
@@ -144,6 +151,7 @@ namespace DLiveTool
             //FlowDocument 加到 RichTexBox子结点上
             box.Document = flowDocument;
             box.Background = Brushes.Transparent;
+            box.Margin = new Thickness(0, 0, 0, _model.LinePadding);
             //添加到父节点上
             _mainPanel.Children.Add(box);
 
@@ -154,13 +162,13 @@ namespace DLiveTool
             box.Loaded += (s, e) =>
             {
                 //组件加载完成后播放动画
-                _anim.From = box.ActualHeight;
+                _anim.From = box.ActualHeight + _model.LinePadding;
                 _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(350);
+                _anim.Duration = TimeSpan.FromMilliseconds(250);
                 rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
             };
         }
-        private void ShowDanmakuMsgEmoticon(string name, string emoticonPath)
+        private void ShowDanmakuMsgEmoticon(string name, string emoticonPath, int height)
         {
             //用户名文本
             Run nameRun = new Run(name + "\u00A0");
@@ -168,11 +176,11 @@ namespace DLiveTool
             //表情图片
             Image emoticonImg = new Image();
             emoticonImg.Source = new BitmapImage(new Uri(emoticonPath, UriKind.Absolute));
-            emoticonImg.Height = _model.FontSize;
+            emoticonImg.Height = _model.FontSize + _model.LinePadding;
 
             //段落类
             Paragraph para = new Paragraph();
-            para.LineHeight = _model.FontSize + _model.LinePadding;
+            para.LineHeight = _model.FontSize;
             para.Background = Brushes.Transparent;
             //文本添加到段落类子节点上
             para.Inlines.Add(nameRun);
@@ -180,6 +188,7 @@ namespace DLiveTool
 
             //FlowDocument类
             FlowDocument flowDocument = new FlowDocument();
+            
             flowDocument.FontSize = _model.FontSize;
             flowDocument.Background = Brushes.Transparent;
             //段落类 加到FlowDocument类子节点上
@@ -190,6 +199,7 @@ namespace DLiveTool
             box.BorderThickness = new Thickness(0);
             //FlowDocument 加到 RichTexBox子结点上
             box.Document = flowDocument;
+            box.Margin = new Thickness(0, 0, 0, _model.LinePadding);
             box.Background = Brushes.Transparent;
             //添加到父节点上
             _mainPanel.Children.Add(box);
@@ -201,9 +211,9 @@ namespace DLiveTool
             box.Loaded += (s, e) =>
             {
                 //组件加载完成后播放动画
-                _anim.From = box.ActualHeight;
+                _anim.From = box.ActualHeight + _model.LinePadding;
                 _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(350);
+                _anim.Duration = TimeSpan.FromMilliseconds(250);
                 rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
             };
         }

@@ -49,7 +49,6 @@ namespace DLiveTool
             HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
             return response;
         }
-
         /// <summary>
         /// 读取 http响应 中的字符串
         /// </summary>
