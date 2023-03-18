@@ -33,5 +33,24 @@ namespace DLiveTool
                 sw.Write(json);
             }
         }
+
+        public static void RecordJson(string fileName, string json)
+        {
+            string dirPath = Path.Combine(_rootPath, "msgCache/DanmakuMsg");
+            string filePath = Path.Combine(dirPath, fileName + ".txt");
+            if (File.Exists(filePath)) return;
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(filePath))
+                {
+                    sw.Write(json);
+                }
+            }
+            catch { }
+        }
     }
 }

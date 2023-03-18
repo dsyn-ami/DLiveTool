@@ -34,7 +34,7 @@ namespace DLiveTool
             _anim.Completed += Anim_Completed;
 
             _biliWS = new BiliWebSocket();
-            _biliWS.ConnectAsync("6136246");
+            _biliWS.ConnectAsync("13308358");
             _biliWS.OnReceiveDanmaku += AddDanmakuMsgToQueue;
         }
 
@@ -43,7 +43,7 @@ namespace DLiveTool
             if (_msgQueue.Count > 0)
             {
                 var data = _msgQueue.Dequeue();
-                ShowDanmakuMsgText(data.UserName, data.Message);
+                ShowDanmakuMsgAsync(data);
             }
             else
             {
@@ -82,41 +82,37 @@ namespace DLiveTool
         /// <param name="msgData"></param>
         private async void ShowDanmakuMsgAsync(ReceiveDanmakuMsg msgData)
         {
-            if (!_isAniming)
+            //动画锁开启
+            _isAniming = true;
+
+            var data = msgData;
+            if (data.Type == ReceiveDanmakuMsg.DanmakuType.Text)
             {
-                //动画锁开启
-                _isAniming = true;
-                var data = msgData;
+                ShowDanmakuMsgText(data.UserName, data.Message);
+            }
+            else if (data.Type == ReceiveDanmakuMsg.DanmakuType.ImgEmoticon)
+            {
+                string fileName = data.Emoticon.ImgUrl.Split("/").Last();
+                string path = System.IO.Path.Combine(DPath.EmoticonCachePath, fileName);
 
-                if (data.Type == ReceiveDanmakuMsg.DanmakuType.Text)
+                //如果本地没有缓存,先下载图片,并写入本地缓存
+                if (string.IsNullOrEmpty(DCache.GetImageCache(fileName)))
                 {
-                    ShowDanmakuMsgText(data.UserName, data.Message);
-                }
-                else if (data.Type == ReceiveDanmakuMsg.DanmakuType.ImgEmoticon)
-                {
-                    string fileName = data.Emoticon.ImgUrl.Split("/").Last();
-                    string path = System.IO.Path.Combine(DPath.EmoticonCachePath, fileName);
+                    System.Net.HttpWebResponse response = await BiliRequester.HttpGet(data.Emoticon.ImgUrl);
+                    //读取字节流,并写入本地文件
 
-                    //如果本地没有缓存,先下载图片,并写入本地缓存
-                    if (string.IsNullOrEmpty(DCache.GetImageCache(fileName)))
+                    using (Stream stream = response.GetResponseStream())
                     {
-                        System.Net.HttpWebResponse response = await BiliRequester.HttpGet(data.Emoticon.ImgUrl);
-                        //读取字节流,并写入本地文件
-
-                        using (Stream stream = response.GetResponseStream())
+                        bool isSuccess = await FileWriter.WriteFileAsync(path, stream);
+                        if (!isSuccess)
                         {
-                            bool isSuccess = await FileWriter.WriteFileAsync(path, stream);
-                            if (!isSuccess)
-                            {
-                                _isAniming = false;
-                                return;
-                            }
+                            _isAniming = false;
+                            return;
                         }
                     }
-
-                    ShowDanmakuMsgEmoticon(data.UserName, path, data.Emoticon.Height);
                 }
 
+                ShowDanmakuMsgEmoticon(data.UserName, path, data.Emoticon.Height);
             }
         }
 
@@ -164,7 +160,7 @@ namespace DLiveTool
                 //组件加载完成后播放动画
                 _anim.From = box.ActualHeight + _model.LinePadding;
                 _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(250);
+                _anim.Duration = TimeSpan.FromMilliseconds(350);
                 rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
             };
         }
@@ -213,7 +209,7 @@ namespace DLiveTool
                 //组件加载完成后播放动画
                 _anim.From = box.ActualHeight + _model.LinePadding;
                 _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(250);
+                _anim.Duration = TimeSpan.FromMilliseconds(350);
                 rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
             };
         }

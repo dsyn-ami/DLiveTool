@@ -208,6 +208,7 @@ namespace DLiveTool
                 //收到弹幕
                 case "DANMU_MSG":
                     ReceiveDanmakuMsg receiveDanmakuMsg = new ReceiveDanmakuMsg(json);
+                    BiliMsgWriter.RecordJson(receiveDanmakuMsg.Message, json);
                     OnReceiveDanmaku?.Invoke(receiveDanmakuMsg);
                     break;
                 //收到礼物
