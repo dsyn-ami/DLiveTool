@@ -18,15 +18,10 @@ namespace DLiveTool
         /// </summary>
         public static string RootPath => _rootPath;
 
-        static string _emoticonCachePath = Path.Combine(_rootPath, "Cache/Emoticon/");
+        static string _imgCachePath = Path.Combine(_rootPath, "Cache/ImgCache");
         /// <summary>
-        /// 表情本地缓存文件夹地址
+        /// 本地图片缓存文件夹地址
         /// </summary>
-        public static string EmoticonCachePath => _emoticonCachePath;
-        static string _faceCachePath = Path.Combine(_rootPath, "Cache/Face/");
-        /// <summary>
-        /// 头像本地缓存文件夹地址
-        /// </summary>
-        public static string FaceCachePath => _faceCachePath;
+        public static string ImgCachePath => _imgCachePath;
     }
 }

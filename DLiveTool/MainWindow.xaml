@@ -5,8 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DLiveTool"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="1280">
     <Grid>
-        <Button x:Name="_openBtn" Margin="190" Background="LightBlue" Content="打开或关闭弹幕窗口" Click="OpenBtn_Click"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+
+        </Grid.ColumnDefinitions>
+        
+        <Image x:Name="_topPic" Grid.Row="0" Grid.Column="0" Stretch="Fill"/>
+
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!--头像区域-->
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Image x:Name="_headPic" Margin="20, 10, 20, 0" />
+                <Label x:Name="_userName" Grid.Row="1" Content="用户名" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+            <Label Content="房间号 : " Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="18" />
+            <TextBox x:Name="_roomIdInput" Grid.Row="1" Grid.Column="2" Margin="5, 7, 5, 7"/>
+            <Button x:Name="_connectBtn" Grid.Row="1" Grid.Column="3" Click="OnConnectBtnClick" Margin="10, 8, 10, 8" Content="连接" FontSize="16"/>
+        </Grid>
+        <Button Grid.Row="1" x:Name="_openBtn" Margin="120" Background="LightBlue" Content="打开或关闭弹幕窗口" Click="OpenBtn_Click"/>
     </Grid>
 </Window>

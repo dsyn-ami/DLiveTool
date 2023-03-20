@@ -16,54 +16,30 @@ namespace DLiveTool
         {
             _isInited = true;
             //初始化缓存文件夹地址
-            _emoticonFolder = DPath.EmoticonCachePath;
-            _faceFolder = DPath.FaceCachePath;
+            _imgCacheFolder = DPath.ImgCachePath;
 
             //初始化缓存目录
-            if (!Directory.Exists(_emoticonFolder))
+            if (!Directory.Exists(_imgCacheFolder))
             {
-                Directory.CreateDirectory(_emoticonFolder);
-            }
-            if (!Directory.Exists(_faceFolder))
-            {
-                Directory.CreateDirectory(_faceFolder);
+                Directory.CreateDirectory(_imgCacheFolder);
             }
             
             //获取所有缓存文件信息
-            DirectoryInfo dirInfo = new DirectoryInfo(_faceFolder);
+            DirectoryInfo dirInfo = new DirectoryInfo(_imgCacheFolder);
             FileInfo[] fileInfos = dirInfo.GetFiles();
             foreach (FileInfo fileInfo in fileInfos)
             {
-                AddImageCache(fileInfo.Name, Path.Combine(_faceRelativePath, fileInfo.Name));
-            }
-            dirInfo = new DirectoryInfo(_emoticonFolder);
-            fileInfos = dirInfo.GetFiles();
-            foreach (FileInfo fileInfo in fileInfos)
-            {
-                AddImageCache(fileInfo.Name, Path.Combine(_emoticonRelativePath, fileInfo.Name));
+                AddImageCache(fileInfo.Name, Path.Combine(_imgCacheFolder, fileInfo.Name));
             }
         }
         /// <summary>
-        /// 表情本地缓存文件夹相对地址
+        /// 本地图片缓存路径
         /// </summary>
-        const string _emoticonRelativePath = "/Cache/Emoticon/";
-        /// <summary>
-        /// 头像本地缓存文件夹相对地址
-        /// </summary>
-        const string _faceRelativePath = "/Cache/Face/";
-        /// <summary>
-        /// 表情本地缓存文件夹地址
-        /// </summary>
-        static string _emoticonFolder;
-        /// <summary>
-        /// 头像本地缓存文件夹地址
-        /// </summary>
-        static string _faceFolder;
-
+        static string _imgCacheFolder;
         /// <summary>
         /// 表情,头像等缓存信息的字典
         /// string : 缓存文件名
-        /// string : 资源的本地相对根目录路径
+        /// string : 资源的本地全路径
         /// </summary>
         private static Dictionary<string, string> _imgCacheDict = new Dictionary<string, string>();
 
@@ -71,13 +47,13 @@ namespace DLiveTool
         /// 添加新的缓存信息到缓存目录
         /// </summary>
         /// <param name="fileName">缓存文件名</param>
-        /// <param name="fileRelativePath">文件相对根目录路径</param>
-        public static void AddImageCache(string fileName, string fileRelativePath)
+        /// <param name="fileFullPath">文件全路径</param>
+        public static void AddImageCache(string fileName, string fileFullPath)
         {
             if (!_isInited) Init();
             if (!_imgCacheDict.ContainsKey(fileName))
             {
-                _imgCacheDict.Add(fileName, fileRelativePath);
+                _imgCacheDict.Add(fileName, fileFullPath);
             }
         }
         /// <summary>

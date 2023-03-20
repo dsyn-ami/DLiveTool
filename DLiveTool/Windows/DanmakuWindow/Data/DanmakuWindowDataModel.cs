@@ -15,7 +15,13 @@ namespace DLiveTool
         }
 
         StackPanel _patentPanel;
+        /// <summary>
+        /// 最大显示消息数量
+        /// </summary>
         int _maxItemCount = 20;
+        /// <summary>
+        /// 目前显示的消息列表
+        /// </summary>
         List<RichTextBox> _items = new List<RichTextBox>();
 
         private int _fontSize = 18;
@@ -36,6 +42,16 @@ namespace DLiveTool
         {
             get { return _linePadding; }
             set { _linePadding = value; }
+        }
+
+        private int _rollAnimTime = 150;
+        /// <summary>
+        /// 滚动动画持续时间 ms
+        /// </summary>
+        public int RollAnimTime
+        {
+            get => _rollAnimTime;
+            set { _rollAnimTime = value; }
         }
 
         public void AddRichTexBox(RichTextBox box)

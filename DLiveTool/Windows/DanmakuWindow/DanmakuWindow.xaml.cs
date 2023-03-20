@@ -111,7 +111,7 @@ namespace DLiveTool
             else if (data.Type == ReceiveDanmakuMsg.DanmakuType.ImgEmoticon)
             {
                 string fileName = data.Emoticon.ImgUrl.Split("/").Last();
-                string path = System.IO.Path.Combine(DPath.EmoticonCachePath, fileName);
+                string path = System.IO.Path.Combine(DPath.ImgCachePath, fileName);
 
                 //如果本地没有缓存,先下载图片,并写入本地缓存
                 if (string.IsNullOrEmpty(DCache.GetImageCache(fileName)))
@@ -237,7 +237,7 @@ namespace DLiveTool
                 //组件加载完成后播放动画
                 _anim.From = box.ActualHeight + _model.LinePadding;
                 _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(150);
+                _anim.Duration = TimeSpan.FromMilliseconds(_model.RollAnimTime);
                 rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
             };
         }
@@ -290,7 +290,7 @@ namespace DLiveTool
                 //组件加载完成后播放动画
                 _anim.From = box.ActualHeight + _model.LinePadding;
                 _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(150);
+                _anim.Duration = TimeSpan.FromMilliseconds(_model.RollAnimTime);
                 rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
             };
         }
@@ -351,7 +351,7 @@ namespace DLiveTool
                 //组件加载完成后播放动画
                 _anim.From = box.ActualHeight + _model.LinePadding;
                 _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(150);
+                _anim.Duration = TimeSpan.FromMilliseconds(_model.RollAnimTime);
                 rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
             };
         }

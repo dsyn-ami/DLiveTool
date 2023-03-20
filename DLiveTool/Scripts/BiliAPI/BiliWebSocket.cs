@@ -56,7 +56,7 @@ namespace DLiveTool
         /// 连接到指定直播间，并开始接收消息
         /// </summary>
         /// <param name="roomId">要连接的直播间</param>
-        public async void ConnectAsync(string roomId)
+        public async void ConnectAsync(string roomId, Action OnConnected = null)
         {
             //获取房间基本信息
             string roomInfo = await BiliRequester.GetRoomInitInfo(roomId);
@@ -95,6 +95,7 @@ namespace DLiveTool
             HeartBeatAsync();
             //开始接收消息
             ReceiveAsync();
+            OnConnected?.Invoke();
         }
 
         public async void HeartBeatAsync()
