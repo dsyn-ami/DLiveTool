@@ -41,7 +41,7 @@ namespace DLiveTool.Data
     /// <summary>
     /// 有人进入直播间
     /// </summary>
-    public class ReceiveInterAct
+    public class ReceiveInterAct : IBiliMsg
     {
         public string UserId { get; private set; }
         public string UserName { get; private set; }

@@ -87,7 +87,7 @@ namespace DLiveTool.Data
     }
 }
      */
-    public class ReceiveSendGift
+    public class ReceiveSendGift : IBiliMsg
     {
         public string UserId { get; private set; }
         public string UserName { get; private set; }

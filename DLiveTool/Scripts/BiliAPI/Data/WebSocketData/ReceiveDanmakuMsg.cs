@@ -82,7 +82,7 @@ namespace DLiveTool.Data
     }
      */
 
-    public class ReceiveDanmakuMsg
+    public class ReceiveDanmakuMsg : IBiliMsg
     {
         /// <summary>
         /// 弹幕类型

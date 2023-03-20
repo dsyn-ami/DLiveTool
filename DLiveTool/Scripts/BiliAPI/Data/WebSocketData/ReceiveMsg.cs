@@ -13,7 +13,7 @@ namespace DLiveTool.Data
          ...
      }   
      */
-    public class ReceiveMsg
+    public class ReceiveMsg : IBiliMsg
     {
         public string CMD { get; private set; }
         public ReceiveMsg(string json)
