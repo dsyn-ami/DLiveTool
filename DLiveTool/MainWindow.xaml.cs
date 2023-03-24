@@ -48,8 +48,8 @@ namespace DLiveTool
                 _biliWS.ConnectAsync(roomId, () =>
                 {
                     _connectBtn.Content = "断开";
-                    UpdateImage(_topPic, AnchorData.TopPhoto.Value);
-                    UpdateImage(_headPic, AnchorData.UserFace.Value);
+                    UpdateImageAsync(_topPic, AnchorData.TopPhoto.Value);
+                    UpdateImageAsync(_headPicBrush, AnchorData.UserFace.Value);
                     UpdateText(_userName, AnchorData.UserName.Value);
                 });
             }
@@ -63,9 +63,27 @@ namespace DLiveTool
         /// <summary>
         /// 替换指定Image的展示图片
         /// </summary>
-        /// <param name="image">指定图片组件</param>
+        /// <param name="image">指定图片源</param>
         /// <param name="url">图片url</param>
-        private async void UpdateImage(Image image, string url)
+        private async void UpdateImageAsync(Image image, string url)
+        {
+            image.Source = await LoadImageAsync(url);
+        }
+        /// <summary>
+        /// 替换指定ImageBrush的展示图片
+        /// </summary>
+        /// <param name="imgBrush">指定图片源</param>
+        /// <param name="url">图片url</param>
+        private async void UpdateImageAsync(ImageBrush imgBrush, string url)
+        {
+            imgBrush.ImageSource = await LoadImageAsync(url);
+        }
+        /// <summary>
+        /// 加载图片, 有缓存的话会从缓存加载,否则从url下载
+        /// </summary>
+        /// <param name="url">图片url</param>
+        /// <returns></returns>
+        private async Task<BitmapImage> LoadImageAsync(string url)
         {
             string fileName = url.Split('/').Last();
             string path = Path.Combine(DPath.ImgCachePath, fileName);
@@ -78,11 +96,9 @@ namespace DLiveTool
 
                 bool isSuccess = await FileWriter.WriteFileAsync(path, stream);
                 DCache.AddImageCache(fileName, path);
-                MessageBox.Show("下载图片");
             }
-            //替换图片
-            image.Source = new BitmapImage(new Uri(path));
-        }
+            return new BitmapImage(new Uri(path));
+        }        
         /// <summary>
         /// 更新指定文本组件的文本
         /// </summary>

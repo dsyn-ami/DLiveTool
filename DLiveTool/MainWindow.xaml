@@ -5,21 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DLiveTool"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="1280">
+        Title="DLiveTool" Height="450" Width="720">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="200"/>
+            <RowDefinition Height="120"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
 
         </Grid.ColumnDefinitions>
+        <!--顶部图片-->
+        <Border Background="LightGray">
+            <Image x:Name="_topPic" Grid.Row="0" Grid.Column="0" Stretch="Fill"/>
+        </Border>
         
-        <Image x:Name="_topPic" Grid.Row="0" Grid.Column="0" Stretch="Fill"/>
 
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="120"/>
+                <RowDefinition Height="80"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -30,16 +33,14 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <!--头像区域-->
-            <Grid Grid.Row="0" Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="90"/>
-                    <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
-                <Image x:Name="_headPic" Margin="20, 10, 20, 0" />
-                <Label x:Name="_userName" Grid.Row="1" Content="用户名" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Grid>
-            <Label Content="房间号 : " Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="18" />
-            <TextBox x:Name="_roomIdInput" Grid.Row="1" Grid.Column="2" Margin="5, 7, 5, 7"/>
+            <Border CornerRadius="15" BorderBrush="LightBlue" BorderThickness="2" Margin="25, 10, 25, 0">
+                <Border.Background>
+                    <ImageBrush x:Name="_headPicBrush" ImageSource="C:/Users/dsyn/Desktop/123.jpg"/>
+                </Border.Background>
+            </Border>
+            <Label x:Name="_userName" Grid.Row="1" Content="用户名" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="房间号 :" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"  FontSize="18" />
+            <TextBox x:Name="_roomIdInput" Grid.Row="1" Grid.Column="2" Margin="5, 7, 5, 7" FontSize="16" MaxLines="1" TextAlignment="Center"/>
             <Button x:Name="_connectBtn" Grid.Row="1" Grid.Column="3" Click="OnConnectBtnClick" Margin="10, 8, 10, 8" Content="连接" FontSize="16"/>
         </Grid>
         <Button Grid.Row="1" x:Name="_openBtn" Margin="120" Background="LightBlue" Content="打开或关闭弹幕窗口" Click="OpenBtn_Click"/>
