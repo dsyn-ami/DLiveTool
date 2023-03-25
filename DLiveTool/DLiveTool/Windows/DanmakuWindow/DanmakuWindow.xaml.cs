@@ -23,7 +23,6 @@ namespace DLiveTool
     /// </summary>
     public partial class DanmakuWindow : Window
     {
-        BiliWebSocket _biliWS;
         DanmakuWindowDataModel _model;
         public DanmakuWindow()
         {
@@ -33,11 +32,9 @@ namespace DLiveTool
 
             _anim.Completed += Anim_Completed;
 
-            _biliWS = new BiliWebSocket();
-            _biliWS.ConnectAsync("3044248");
-            _biliWS.OnReceiveDanmaku += AddMsgToQueue;
-            _biliWS.OnUserEnter += AddMsgToQueue;
-            _biliWS.OnReceiveGift += AddMsgToQueue;
+            DConnection.BiliWS.OnReceiveDanmaku += AddMsgToQueue;
+            DConnection.BiliWS.OnUserEnter += AddMsgToQueue;
+            DConnection.BiliWS.OnReceiveGift += AddMsgToQueue;
         }
 
         private void Anim_Completed(object sender, EventArgs e)
