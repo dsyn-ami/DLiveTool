@@ -33,9 +33,12 @@ namespace dsyn
                     }
                     //执行构造函数生成实例
                     _instance = ctor.Invoke(null) as T;
+                    _instance.InitInstance();
                 }
                 return _instance;
             }
         }
+
+        protected virtual void InitInstance() { }
     }
 }

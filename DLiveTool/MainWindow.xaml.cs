@@ -28,6 +28,9 @@ namespace DLiveTool
         public MainWindow()
         {
             InitializeComponent();
+
+            
+            _roomIdInput.Text = ConfigDataMgr.Instance.Data.RoomId;
         }
 
         private void OpenBtn_Click(object sender, RoutedEventArgs e)
@@ -78,6 +81,10 @@ namespace DLiveTool
                         UpdateImageAsync(_topPic, AnchorData.TopPhoto.Value);
                         UpdateImageAsync(_headPicBrush, AnchorData.UserFace.Value);
                         UpdateText(_userName, AnchorData.UserName.Value);
+
+                        //更新房间号
+                        ConfigDataMgr.Instance.Data.RoomId = roomId;
+                        ConfigDataMgr.Instance.SaveData();
                     });
                 }
                 catch (Exception ex)

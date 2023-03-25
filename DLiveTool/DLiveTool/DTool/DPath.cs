@@ -23,5 +23,11 @@ namespace DLiveTool
         /// 本地图片缓存文件夹地址
         /// </summary>
         public static string ImgCachePath => _imgCachePath;
+
+        static string _configDataRootPath = Path.Combine(_rootPath, "Config");
+        /// <summary>
+        /// 配置数据保存位置
+        /// </summary>
+        public static string ConfigDataRootPath => _configDataRootPath;
     }
 }

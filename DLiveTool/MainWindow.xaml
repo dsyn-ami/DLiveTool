@@ -15,7 +15,7 @@
 
         </Grid.ColumnDefinitions>
         <!--顶部图片-->
-        <Border Background="LightGray">
+        <Border Background="AliceBlue">
             <Image x:Name="_topPic" Grid.Row="0" Grid.Column="0" Stretch="Fill"/>
         </Border>
         
