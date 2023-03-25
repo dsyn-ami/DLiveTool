@@ -50,18 +50,27 @@ namespace DLiveTool
 
         ClientWebSocket _ws;
         CancellationTokenSource _tokenSource = new CancellationTokenSource();
-        Uri _uri = new Uri(BiliAPI.LiveWebSocketUrl);
 
         /// <summary>
         /// 连接到指定直播间，并开始接收消息
+        /// Action<int, string> :  int:code,   string:msg
         /// </summary>
         /// <param name="roomId">要连接的直播间</param>
-        public async void ConnectAsync(string roomId, Action OnConnected = null)
+        public async void ConnectAsync(string roomId, Action<int, string> OnConnected = null)
         {
             //获取房间基本信息
             string roomInfo = await BiliRequester.GetRoomInitInfo(roomId);
             //保存房间信息
             JObject jObj = JObject.Parse(roomInfo);
+
+            int code = int.Parse(jObj["code"].ToString());
+            string msg = jObj["message"].ToString();
+            if(code != 0)
+            {
+                //连接房间失败
+                OnConnected?.Invoke(code, msg);
+                return;
+            }
             AnchorData.RoomId.Value = jObj["data"]["room_id"]?.ToString(); 
             AnchorData.UserId.Value = jObj["data"]["uid"]?.ToString();
             AnchorData.ShotRoomId.Value = jObj["data"]["short_id"]?.ToString();
@@ -95,7 +104,7 @@ namespace DLiveTool
             HeartBeatAsync();
             //开始接收消息
             ReceiveAsync();
-            OnConnected?.Invoke();
+            OnConnected?.Invoke(code, msg);
         }
 
         public async void HeartBeatAsync()
@@ -167,8 +176,6 @@ namespace DLiveTool
                 int packetLength = BitConverter.ToInt32(packetLengthByte, 0);
 
                 //打包
-                byte[] dataa = data.Skip(headIndex).Take(packetLength).ToArray();
-
                 Packet packet = new Packet(data.Skip(headIndex).Take(packetLength).ToArray());
 
                 //未压缩，直接使用数据

@@ -42,12 +42,24 @@ namespace DLiveTool
         {
             string roomId = _roomIdInput.Text;
             if (string.IsNullOrEmpty(roomId)) return;
+            _roomIdInput.IsEnabled = false;
             _connectBtn.Content = "连接中";
+            _connectBtn.IsEnabled = false;
             try
             {
-                _biliWS.ConnectAsync(roomId, () =>
+                _biliWS.ConnectAsync(roomId, (code, msg) =>
                 {
+                    if(code != 0)
+                    {
+                        MessageBox.Show("msg");
+                        _connectBtn.Content = "连接";
+                        _connectBtn.IsEnabled = true;
+                        _roomIdInput.IsEnabled = true;
+                        return;
+                    }
+
                     _connectBtn.Content = "断开";
+                    _connectBtn.IsEnabled = true;
                     UpdateImageAsync(_topPic, AnchorData.TopPhoto.Value);
                     UpdateImageAsync(_headPicBrush, AnchorData.UserFace.Value);
                     UpdateText(_userName, AnchorData.UserName.Value);
@@ -56,6 +68,8 @@ namespace DLiveTool
             catch(Exception ex)
             {
                 _connectBtn.Content = "连接";
+                _roomIdInput.IsEnabled = true;
+                _connectBtn.IsEnabled = true;
                 MessageBox.Show(ex.Message);
             }
         }

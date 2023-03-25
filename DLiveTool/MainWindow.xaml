@@ -35,7 +35,7 @@
             <!--头像区域-->
             <Border CornerRadius="15" BorderBrush="LightBlue" BorderThickness="2" Margin="25, 10, 25, 0">
                 <Border.Background>
-                    <ImageBrush x:Name="_headPicBrush" ImageSource="C:/Users/dsyn/Desktop/123.jpg"/>
+                    <ImageBrush x:Name="_headPicBrush"/>
                 </Border.Background>
             </Border>
             <Label x:Name="_userName" Grid.Row="1" Content="用户名" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
