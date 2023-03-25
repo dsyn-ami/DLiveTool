@@ -69,7 +69,7 @@ namespace DLiveTool
                     {
                         if (code != 0)
                         {
-                            MessageBox.Show("msg");
+                            MessageBox.Show(msg);
                             _connectBtn.Content = "连接";
                             _connectBtn.IsEnabled = true;
                             _roomIdInput.IsEnabled = true;

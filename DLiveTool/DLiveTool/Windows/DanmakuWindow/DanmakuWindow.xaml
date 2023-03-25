@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DLiveTool"
         mc:Ignorable="d"
-        Title="Window1" Height="400" Width="450">
+        Title="Danmaku" Height="600" Width="450">
     <Window.Resources>
         <LinearGradientBrush x:Key="bgBrush">
             <GradientStop Color="LightBlue" Offset="0"/>

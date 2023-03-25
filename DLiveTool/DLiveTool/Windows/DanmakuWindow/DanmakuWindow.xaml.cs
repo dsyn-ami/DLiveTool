@@ -251,7 +251,7 @@ namespace DLiveTool
             nameRun.Foreground = Brushes.Blue;
             //消息文本
             Run msgRun = new Run("进入直播间");
-            msgRun.Foreground = Brushes.Black;
+            msgRun.Foreground = Brushes.Gray;
 
             //段落类
             Paragraph para = new Paragraph();

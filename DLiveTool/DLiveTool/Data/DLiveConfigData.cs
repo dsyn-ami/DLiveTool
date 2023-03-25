@@ -16,5 +16,13 @@ namespace DLiveTool
         /// 记录上一次连接的房间id
         /// </summary>
         public string RoomId;
+        /// <summary>
+        /// 是否显示进入直播间信息
+        /// </summary>
+        public bool IsShowEnterInfo;
+        /// <summary>
+        /// 屏蔽用户名关键词列表
+        /// </summary>
+        public List<string> AvoidNameKeyWordList;
     }
 }

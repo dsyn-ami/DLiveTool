@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DLiveTool"
         mc:Ignorable="d"
-        Title="DLiveTool" Height="450" Width="720">
+        Title="DLiveTool" Height="520" Width="720">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
@@ -18,8 +18,8 @@
         <Border Background="AliceBlue">
             <Image x:Name="_topPic" Grid.Row="0" Grid.Column="0" Stretch="Fill"/>
         </Border>
-        
 
+        <!--顶部菜单-->
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80"/>
@@ -43,6 +43,50 @@
             <TextBox x:Name="_roomIdInput" Grid.Row="1" Grid.Column="2" Margin="5, 7, 5, 7" FontSize="16" MaxLines="1" TextAlignment="Center"/>
             <Button x:Name="_connectBtn" Grid.Row="1" Grid.Column="3" Click="OnConnectBtnClick" Margin="10, 8, 10, 8" Content="连接" FontSize="16"/>
         </Grid>
-        <Button Grid.Row="1" x:Name="_openBtn" Margin="120" Background="LightBlue" Content="打开或关闭弹幕窗口" Click="OpenBtn_Click"/>
+
+        <Button Grid.Row="1" x:Name="_openBtn" Margin="90, 170, 260, 170" Background="LightBlue" Content="打开或关闭弹幕窗口" Click="OpenBtn_Click"/>
+        <!--主体设置菜单-->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <!--显示进入直播间消息-->
+                <RowDefinition Height="40"/>
+                <!--屏蔽昵称列表-->
+                <RowDefinition Height="40"/>
+                <!--增加屏蔽项输入框-->
+                <RowDefinition Height="40"/>
+                <!--屏蔽列表操作按钮区域-->
+                <RowDefinition/>
+                <!--屏蔽列表展示区域-->
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+
+            <CheckBox Grid.Row="0" Grid.Column="1" Content="进入直播间消息" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" BorderThickness="3,4,3,4"/>
+            <!--屏蔽用户名关键词操作区域-->
+            <Border Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Background="AliceBlue" Margin="8, 4, 8, 6"/>
+            <Label Content="屏蔽用户名关键词" Grid.Row="1" Grid.Column="1" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox Grid.Row="2" Grid.Column="1" FontSize="16" MaxLines="1" Margin="15, 6, 15, 6"/>
+            <Grid Grid.Row="3" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button FontSize="18" Margin="15, 6, 10, 6">+</Button>
+                <Button Grid.Column="1" FontSize="18" Margin="10, 6, 15, 6">-</Button>
+            </Grid>
+            <ListBox Grid.Row="4" Grid.Column="1" FontSize="18" Margin="15, 6, 15, 10">
+                <Label>1</Label>
+                <Label>12</Label>
+                <Label>123</Label>
+                <Label>1234</Label>
+                <Label>12345</Label>
+                <Label>123456</Label>
+                <Label>1234567</Label>
+                <Label>12345678</Label>
+            </ListBox>
+        </Grid>
     </Grid>
 </Window>
