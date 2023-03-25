@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DLiveTool\WebSocket\" />
     <Folder Include="TestChatGPT\" />
   </ItemGroup>
 

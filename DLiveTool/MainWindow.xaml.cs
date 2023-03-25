@@ -25,7 +25,6 @@ namespace DLiveTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        BiliWebSocket _biliWS = new BiliWebSocket();
         public MainWindow()
         {
             InitializeComponent();
@@ -42,36 +41,54 @@ namespace DLiveTool
         {
             string roomId = _roomIdInput.Text;
             if (string.IsNullOrEmpty(roomId)) return;
-            _roomIdInput.IsEnabled = false;
-            _connectBtn.Content = "连接中";
-            _connectBtn.IsEnabled = false;
-            try
-            {
-                _biliWS.ConnectAsync(roomId, (code, msg) =>
-                {
-                    if(code != 0)
-                    {
-                        MessageBox.Show("msg");
-                        _connectBtn.Content = "连接";
-                        _connectBtn.IsEnabled = true;
-                        _roomIdInput.IsEnabled = true;
-                        return;
-                    }
 
-                    _connectBtn.Content = "断开";
-                    _connectBtn.IsEnabled = true;
-                    UpdateImageAsync(_topPic, AnchorData.TopPhoto.Value);
-                    UpdateImageAsync(_headPicBrush, AnchorData.UserFace.Value);
-                    UpdateText(_userName, AnchorData.UserName.Value);
-                });
-            }
-            catch(Exception ex)
+            
+            if (_connectBtn.Content.Equals("断开"))
             {
-                _connectBtn.Content = "连接";
                 _roomIdInput.IsEnabled = true;
+                _connectBtn.Content = "连接";
                 _connectBtn.IsEnabled = true;
-                MessageBox.Show(ex.Message);
+
+                _topPic.Source = null;
+                _headPicBrush.ImageSource = null;
+                UpdateText(_userName, "用户名");
+
+                DConnection.Disconnect();
             }
+            else if(_connectBtn.Content.Equals("连接"))
+            {
+                _roomIdInput.IsEnabled = false;
+                _connectBtn.Content = "连接中";
+                _connectBtn.IsEnabled = false;
+                try
+                {
+                    DConnection.ConnectAsync(roomId, (code, msg) =>
+                    {
+                        if (code != 0)
+                        {
+                            MessageBox.Show("msg");
+                            _connectBtn.Content = "连接";
+                            _connectBtn.IsEnabled = true;
+                            _roomIdInput.IsEnabled = true;
+                            return;
+                        }
+
+                        _connectBtn.Content = "断开";
+                        _connectBtn.IsEnabled = true;
+                        UpdateImageAsync(_topPic, AnchorData.TopPhoto.Value);
+                        UpdateImageAsync(_headPicBrush, AnchorData.UserFace.Value);
+                        UpdateText(_userName, AnchorData.UserName.Value);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _connectBtn.Content = "连接";
+                    _roomIdInput.IsEnabled = true;
+                    _connectBtn.IsEnabled = true;
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            
         }
 
         /// <summary>
@@ -99,6 +116,7 @@ namespace DLiveTool
         /// <returns></returns>
         private async Task<BitmapImage> LoadImageAsync(string url)
         {
+            if (string.IsNullOrEmpty(url)) return null;
             string fileName = url.Split('/').Last();
             string path = Path.Combine(DPath.ImgCachePath, fileName);
             //检查本地文件是否有缓存

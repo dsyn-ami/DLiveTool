@@ -107,6 +107,12 @@ namespace DLiveTool
             OnConnected?.Invoke(code, msg);
         }
 
+        public void DisConnect()
+        {
+            _ws?.Dispose();
+            _ws = null;
+        }
+
         public async void HeartBeatAsync()
         {
             while (_ws != null && _ws.State == WebSocketState.Open) //发送心跳包保持连接
@@ -118,7 +124,17 @@ namespace DLiveTool
                     s += (" " + b.ToString());
                 }
                 Console.WriteLine(s);
-                await _ws.SendAsync(new ArraySegment<byte>(beatHeartData), WebSocketMessageType.Binary, true, _tokenSource.Token);
+
+                try
+                {
+                    await _ws.SendAsync(new ArraySegment<byte>(beatHeartData), WebSocketMessageType.Binary, true, _tokenSource.Token);
+                }
+                catch
+                {
+                    _ws?.Dispose();
+                    _ws = null;
+                    return;
+                }
                 Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "发送心跳数据包：");
                 await Task.Delay(30 * 1000);
             }
@@ -135,7 +151,18 @@ namespace DLiveTool
             int realLength = 0;
             while (_ws != null && _ws.State == WebSocketState.Open)
             {
-                var result = await _ws.ReceiveAsync(new ArraySegment<byte>(buffer), new CancellationToken());
+                WebSocketReceiveResult result = null;
+                try
+                {
+                    result = await _ws.ReceiveAsync(new ArraySegment<byte>(buffer), new CancellationToken());
+                }
+                catch
+                {
+                    _ws?.Dispose();
+                    _ws = null;
+                    return;
+                }
+                
                 //收到的数据写入缓存
                 Array.Copy(buffer, 0, realData, 0, result.Count);
                 realLength = result.Count;
