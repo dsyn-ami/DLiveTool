@@ -245,6 +245,23 @@ namespace DLiveTool
         /// <param name="name"></param>
         private void ShowEnterInfo(ReceiveInterAct enterInfo)
         {
+            //未打开开关，不显示进入房间信息
+            if (ConfigDataMgr.Instance.Data.IsShowEnterInfo == false)
+            {
+                _isAniming = false;
+                return;
+            }
+            
+            var avoidList = ConfigDataMgr.Instance.Data.AvoidNameKeyWordList;
+            //被屏蔽的用户不显示
+            foreach (var avoidName in avoidList)
+            {
+                if (enterInfo.UserName.Contains(avoidName))
+                {
+                    _isAniming = false;
+                    return;
+                }
+            }
             //用户名文本
             Run nameRun = new Run(enterInfo.UserName + "\u00A0");
 

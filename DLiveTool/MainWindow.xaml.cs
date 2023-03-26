@@ -29,8 +29,10 @@ namespace DLiveTool
         {
             InitializeComponent();
 
-            
-            _roomIdInput.Text = ConfigDataMgr.Instance.Data.RoomId;
+
+            var data = ConfigDataMgr.Instance.Data;
+            _roomIdInput.Text = data.RoomId;
+            _showEnterCheckBox.IsChecked = data.IsShowEnterInfo;
         }
 
         private void OpenBtn_Click(object sender, RoutedEventArgs e)
@@ -146,6 +148,18 @@ namespace DLiveTool
         private void UpdateText(ContentControl contentItem, string value)
         {
             contentItem.Content = value;
+        }
+
+        private void OnShowEnterChecked(object sender, RoutedEventArgs e)
+        {
+            ConfigDataMgr.Instance.Data.IsShowEnterInfo = true;
+            ConfigDataMgr.Instance.SaveData();
+        }
+
+        private void OnShowEnterUnChecked(object sender, RoutedEventArgs e)
+        {
+            ConfigDataMgr.Instance.Data.IsShowEnterInfo = false;
+            ConfigDataMgr.Instance.SaveData();
         }
     }
 }

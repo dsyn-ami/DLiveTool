@@ -64,7 +64,7 @@
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
 
-            <CheckBox Grid.Row="0" Grid.Column="1" Content="进入直播间消息" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" BorderThickness="3,4,3,4"/>
+            <CheckBox x:Name="_showEnterCheckBox" Grid.Row="0" Grid.Column="1" Content="进入直播间消息" Checked="OnShowEnterChecked" Unchecked="OnShowEnterUnChecked" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" BorderThickness="3,4,3,4"/>
             <!--屏蔽用户名关键词操作区域-->
             <Border Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Background="AliceBlue" Margin="8, 4, 8, 6"/>
             <Label Content="屏蔽用户名关键词" Grid.Row="1" Grid.Column="1" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"/>

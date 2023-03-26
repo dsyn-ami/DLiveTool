@@ -19,10 +19,10 @@ namespace DLiveTool
         /// <summary>
         /// 是否显示进入直播间信息
         /// </summary>
-        public bool IsShowEnterInfo;
+        public bool IsShowEnterInfo = true;
         /// <summary>
         /// 屏蔽用户名关键词列表
         /// </summary>
-        public List<string> AvoidNameKeyWordList;
+        public List<string> AvoidNameKeyWordList = new List<string>();
     }
 }
