@@ -24,6 +24,7 @@ namespace DLiveTool
     public partial class DanmakuWindow : Window
     {
         DanmakuWindowDataModel _model;
+        MediaPlayer _mediaPlayer = new MediaPlayer();
         public DanmakuWindow()
         {
             InitializeComponent();
@@ -101,6 +102,9 @@ namespace DLiveTool
         private async void ShowDanmakuMsgAsync(ReceiveDanmakuMsg msgData)
         {
             var data = msgData;
+
+            TtsPlayer.Instance.AddPlayInstance($"{msgData.UserName}说{msgData.Message}");
+
             if (data.Type == ReceiveDanmakuMsg.DanmakuType.Text)
             {
                 ShowDanmakuMsgText(data.UserName, data.Message);
@@ -262,6 +266,8 @@ namespace DLiveTool
                     return;
                 }
             }
+            TtsPlayer.Instance.AddPlayInstance($"欢迎{enterInfo.UserName}进入直播间");
+
             //用户名文本
             Run nameRun = new Run(enterInfo.UserName + "\u00A0");
 
@@ -314,6 +320,7 @@ namespace DLiveTool
         /// <param name="name"></param>
         private void ShowReceiveGiftInfo(ReceiveSendGift msg)
         {
+            TtsPlayer.Instance.AddPlayInstance($"感谢{msg.UserName}送的{msg.GiftCount}个{msg.GiftName}");
             //用户名文本
             Run nameRun = new Run(msg.UserName + "\u00A0");
             nameRun.Foreground = Brushes.Blue;

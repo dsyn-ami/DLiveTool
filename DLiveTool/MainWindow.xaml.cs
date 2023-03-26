@@ -29,7 +29,6 @@ namespace DLiveTool
         {
             InitializeComponent();
 
-
             var data = ConfigDataMgr.Instance.Data;
             _roomIdInput.Text = data.RoomId;
             _showEnterCheckBox.IsChecked = data.IsShowEnterInfo;

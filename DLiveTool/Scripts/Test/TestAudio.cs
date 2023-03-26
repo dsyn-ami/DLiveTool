@@ -41,7 +41,6 @@ namespace TestAudio
 
             string audioUrl = responseJson.Split('\"')[3];
 
-
             response.Dispose();
 
             response = await _client.GetAsync(audioUrl);
