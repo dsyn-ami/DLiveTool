@@ -33,6 +33,11 @@ namespace DLiveTool
             var data = ConfigDataMgr.Instance.Data;
             _roomIdInput.Text = data.RoomId;
             _showEnterCheckBox.IsChecked = data.IsShowEnterInfo;
+
+            foreach (string avoidKey in data.AvoidNameKeyWordList)
+            {
+                _avoidKeyListBox.Items.Add(avoidKey);
+            }
         }
 
         private void OpenBtn_Click(object sender, RoutedEventArgs e)
@@ -160,6 +165,34 @@ namespace DLiveTool
         {
             ConfigDataMgr.Instance.Data.IsShowEnterInfo = false;
             ConfigDataMgr.Instance.SaveData();
+        }
+
+        private void OnAddAvoidKeyBtnClick(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_avoidKeyInput.Text))
+            {
+                string addKey = _avoidKeyInput.Text;
+                var curList = ConfigDataMgr.Instance.Data.AvoidNameKeyWordList;
+                if (!curList.Contains(addKey))
+                {
+                    curList.Add(addKey);
+                    _avoidKeyInput.Text = String.Empty;
+                    _avoidKeyListBox.Items.Add(addKey);
+                    ConfigDataMgr.Instance.SaveData();
+                }
+            }
+        }
+
+        private void OnRemoveAvoidKeyBtnClick(object sender, RoutedEventArgs e)
+        {
+            var curList = ConfigDataMgr.Instance.Data.AvoidNameKeyWordList;
+            object selectedItem = _avoidKeyListBox.SelectedItem;
+            if(selectedItem != null)
+            {
+                curList.Remove(selectedItem.ToString());
+                _avoidKeyListBox.Items.Remove(selectedItem);
+                ConfigDataMgr.Instance.SaveData();
+            }
         }
     }
 }

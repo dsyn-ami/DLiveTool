@@ -68,24 +68,16 @@
             <!--屏蔽用户名关键词操作区域-->
             <Border Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Background="AliceBlue" Margin="8, 4, 8, 6"/>
             <Label Content="屏蔽用户名关键词" Grid.Row="1" Grid.Column="1" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBox Grid.Row="2" Grid.Column="1" FontSize="16" MaxLines="1" Margin="15, 6, 15, 6"/>
+            <TextBox x:Name="_avoidKeyInput" Grid.Row="2" Grid.Column="1" FontSize="16" MaxLines="1" Margin="15, 6, 15, 6"/>
             <Grid Grid.Row="3" Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button FontSize="18" Margin="15, 6, 10, 6">+</Button>
-                <Button Grid.Column="1" FontSize="18" Margin="10, 6, 15, 6">-</Button>
+                <Button x:Name="_addAvoidKeyBtn" FontSize="18" Margin="15, 6, 10, 6" Click="OnAddAvoidKeyBtnClick">+</Button>
+                <Button x:Name="_removeAvoidKeyBtn" Grid.Column="1" FontSize="18" Margin="10, 6, 15, 6" Click="OnRemoveAvoidKeyBtnClick">-</Button>
             </Grid>
-            <ListBox Grid.Row="4" Grid.Column="1" FontSize="18" Margin="15, 6, 15, 10">
-                <Label>1</Label>
-                <Label>12</Label>
-                <Label>123</Label>
-                <Label>1234</Label>
-                <Label>12345</Label>
-                <Label>123456</Label>
-                <Label>1234567</Label>
-                <Label>12345678</Label>
+            <ListBox x:Name="_avoidKeyListBox" Grid.Row="4" Grid.Column="1" FontSize="18" Margin="15, 6, 15, 10">
             </ListBox>
         </Grid>
     </Grid>
