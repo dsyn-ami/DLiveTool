@@ -33,7 +33,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <!--头像区域-->
-            <Border CornerRadius="15" BorderBrush="LightBlue" BorderThickness="2" Margin="25, 10, 25, 0">
+            <Border CornerRadius="15" BorderBrush="LightBlue" BorderThickness="3" Margin="25, 10, 25, 0">
                 <Border.Background>
                     <ImageBrush x:Name="_headPicBrush"/>
                 </Border.Background>

@@ -49,7 +49,7 @@ namespace DLiveTool
 
         private async void RequestVoice()
         {
-            bool isSuccess = await TtsRequester.RequsetTtsVoiceAsync(this);
+            bool isSuccess = await TtsRequester.RequsetTtsDeemoAsync(this);
             if (isSuccess)
             {
                 _loadState = 1;
