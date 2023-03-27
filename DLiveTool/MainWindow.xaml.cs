@@ -29,6 +29,15 @@ namespace DLiveTool
         {
             InitializeComponent();
 
+            //初始化缓存
+            DCache.Init();
+
+            //刷新窗口
+            Refresh();
+        }
+
+        private void Refresh()
+        {
             var data = ConfigDataMgr.Instance.Data;
             _roomIdInput.Text = data.RoomId;
             _showEnterCheckBox.IsChecked = data.IsShowEnterInfo;

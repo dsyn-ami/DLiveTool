@@ -12,30 +12,33 @@ namespace DLiveTool
     public static class DCache
     {
         static bool _isInited = false;
-        private static void Init()
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        public static void Init()
         {
+            if (_isInited) return;
             _isInited = true;
-            //初始化缓存文件夹地址
-            _imgCacheFolder = DPath.ImgCachePath;
 
-            //初始化缓存目录
-            if (!Directory.Exists(_imgCacheFolder))
+            //初始化图片缓存目录
+            if (!Directory.Exists(DPath.ImgCachePath))
             {
-                Directory.CreateDirectory(_imgCacheFolder);
+                Directory.CreateDirectory(DPath.ImgCachePath);
+            }
+            //初始化语音缓存目录
+            if (!Directory.Exists(DPath.VoiceCacheRootPath))
+            {
+                Directory.CreateDirectory(DPath.VoiceCacheRootPath);
             }
             
-            //获取所有缓存文件信息
-            DirectoryInfo dirInfo = new DirectoryInfo(_imgCacheFolder);
+            //获取所有图片缓存文件信息
+            DirectoryInfo dirInfo = new DirectoryInfo(DPath.ImgCachePath);
             FileInfo[] fileInfos = dirInfo.GetFiles();
             foreach (FileInfo fileInfo in fileInfos)
             {
-                AddImageCache(fileInfo.Name, Path.Combine(_imgCacheFolder, fileInfo.Name));
+                AddImageCache(fileInfo.Name, Path.Combine(DPath.ImgCachePath, fileInfo.Name));
             }
         }
-        /// <summary>
-        /// 本地图片缓存路径
-        /// </summary>
-        static string _imgCacheFolder;
         /// <summary>
         /// 表情,头像等缓存信息的字典
         /// string : 缓存文件名
