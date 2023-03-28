@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DLiveTool
 {
-    internal class MainWindowDateModel
+    public class MainWindowDateModel
     {
     }
 }

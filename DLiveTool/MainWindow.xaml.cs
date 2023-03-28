@@ -40,9 +40,9 @@ namespace DLiveTool
         {
             var data = ConfigDataMgr.Instance.Data;
             _roomIdInput.Text = data.RoomId;
-            _showEnterCheckBox.IsChecked = data.IsShowEnterInfo;
+            _showEnterCheckBox.IsChecked = data.DanmakuWindowConfig.IsShowEnterInfo;
 
-            foreach (string avoidKey in data.AvoidNameKeyWordList)
+            foreach (string avoidKey in data.DanmakuWindowConfig.AvoidNameKeyWordList)
             {
                 _avoidKeyListBox.Items.Add(avoidKey);
             }
@@ -165,13 +165,13 @@ namespace DLiveTool
 
         private void OnShowEnterChecked(object sender, RoutedEventArgs e)
         {
-            ConfigDataMgr.Instance.Data.IsShowEnterInfo = true;
+            ConfigDataMgr.Instance.Data.DanmakuWindowConfig.IsShowEnterInfo = true;
             ConfigDataMgr.Instance.SaveData();
         }
 
         private void OnShowEnterUnChecked(object sender, RoutedEventArgs e)
         {
-            ConfigDataMgr.Instance.Data.IsShowEnterInfo = false;
+            ConfigDataMgr.Instance.Data.DanmakuWindowConfig.IsShowEnterInfo = false;
             ConfigDataMgr.Instance.SaveData();
         }
 
@@ -180,7 +180,7 @@ namespace DLiveTool
             if (!string.IsNullOrEmpty(_avoidKeyInput.Text))
             {
                 string addKey = _avoidKeyInput.Text;
-                var curList = ConfigDataMgr.Instance.Data.AvoidNameKeyWordList;
+                var curList = ConfigDataMgr.Instance.Data.DanmakuWindowConfig.AvoidNameKeyWordList;
                 if (!curList.Contains(addKey))
                 {
                     curList.Add(addKey);
@@ -193,7 +193,7 @@ namespace DLiveTool
 
         private void OnRemoveAvoidKeyBtnClick(object sender, RoutedEventArgs e)
         {
-            var curList = ConfigDataMgr.Instance.Data.AvoidNameKeyWordList;
+            var curList = ConfigDataMgr.Instance.Data.DanmakuWindowConfig.AvoidNameKeyWordList;
             object selectedItem = _avoidKeyListBox.SelectedItem;
             if(selectedItem != null)
             {

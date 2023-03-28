@@ -24,13 +24,14 @@ namespace DLiveTool
     public partial class DanmakuWindow : Window
     {
         DanmakuWindowDataModel _model;
+        DanmakuWindowConfig _config;
         MediaPlayer _mediaPlayer = new MediaPlayer();
         public DanmakuWindow()
         {
             InitializeComponent();
 
             _model = new DanmakuWindowDataModel(_mainPanel);
-
+            _config = ConfigDataMgr.Instance.Data.DanmakuWindowConfig;
             _anim.Completed += Anim_Completed;
 
             DConnection.BiliWS.OnReceiveDanmaku += AddMsgToQueue;
@@ -68,7 +69,6 @@ namespace DLiveTool
                 HandleMsg(msgData);
             }
         }
-
         private void HandleMsg(IBiliMsg msg)
         {
             if (msg is ReceiveDanmakuMsg)
@@ -103,7 +103,7 @@ namespace DLiveTool
         {
             var data = msgData;
 
-            TtsPlayer.Instance.AddPlayInstance($"{msgData.UserName}说{msgData.Message}");
+            TtsPlayer.Instance.AddPlayInstance($"{msgData.UserName}说: {msgData.Message}");
 
             if (data.Type == ReceiveDanmakuMsg.DanmakuType.Text)
             {
@@ -151,7 +151,7 @@ namespace DLiveTool
 
             //段落类
             Paragraph para = new Paragraph();
-            para.LineHeight = _model.FontSize;
+            para.LineHeight = _config.FontSize;
             para.Background = Brushes.Transparent;
             //文本添加到段落类子节点上
             para.Inlines.Add(nameRun);
@@ -159,7 +159,7 @@ namespace DLiveTool
 
             //FlowDocument类
             FlowDocument flowDocument = new FlowDocument();
-            flowDocument.FontSize = _model.FontSize;
+            flowDocument.FontSize = _config.FontSize;
             flowDocument.Background = Brushes.Transparent;
             //段落类 加到FlowDocument类子节点上
             flowDocument.Blocks.Add(para);
@@ -170,7 +170,7 @@ namespace DLiveTool
             //FlowDocument 加到 RichTexBox子结点上
             box.Document = flowDocument;
             box.Background = Brushes.Transparent;
-            box.Margin = new Thickness(0, 0, 0, _model.LinePadding);
+            box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
             //添加到父节点上
             _mainPanel.Children.Add(box);
 
@@ -181,7 +181,7 @@ namespace DLiveTool
             box.Loaded += (s, e) =>
             {
                 //组件加载完成后播放动画
-                _anim.From = box.ActualHeight + _model.LinePadding;
+                _anim.From = box.ActualHeight + _config.LinePadding;
                 _anim.To = 0;
                 _anim.Duration = TimeSpan.FromMilliseconds(150);
                 rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
@@ -201,11 +201,11 @@ namespace DLiveTool
             //表情图片
             Image emoticonImg = new Image();
             emoticonImg.Source = new BitmapImage(new Uri(emoticonPath, UriKind.Absolute));
-            emoticonImg.Height = _model.FontSize + _model.LinePadding;
+            emoticonImg.Height = _config.FontSize + _config.LinePadding;
 
             //段落类
             Paragraph para = new Paragraph();
-            para.LineHeight = _model.FontSize;
+            para.LineHeight = _config.FontSize;
             para.Background = Brushes.Transparent;
             //文本添加到段落类子节点上
             para.Inlines.Add(nameRun);
@@ -214,7 +214,7 @@ namespace DLiveTool
             //FlowDocument类
             FlowDocument flowDocument = new FlowDocument();
             
-            flowDocument.FontSize = _model.FontSize;
+            flowDocument.FontSize = _config.FontSize;
             flowDocument.Background = Brushes.Transparent;
             //段落类 加到FlowDocument类子节点上
             flowDocument.Blocks.Add(para);
@@ -224,7 +224,7 @@ namespace DLiveTool
             box.BorderThickness = new Thickness(0);
             //FlowDocument 加到 RichTexBox子结点上
             box.Document = flowDocument;
-            box.Margin = new Thickness(0, 0, 0, _model.LinePadding);
+            box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
             box.Background = Brushes.Transparent;
             //添加到父节点上
             _mainPanel.Children.Add(box);
@@ -236,9 +236,9 @@ namespace DLiveTool
             box.Loaded += (s, e) =>
             {
                 //组件加载完成后播放动画
-                _anim.From = box.ActualHeight + _model.LinePadding;
+                _anim.From = box.ActualHeight + _config.LinePadding;
                 _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(_model.RollAnimTime);
+                _anim.Duration = TimeSpan.FromMilliseconds(_config.RollAnimTime);
                 rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
             };
         }
@@ -250,13 +250,13 @@ namespace DLiveTool
         private void ShowEnterInfo(ReceiveInterAct enterInfo)
         {
             //未打开开关，不显示进入房间信息
-            if (ConfigDataMgr.Instance.Data.IsShowEnterInfo == false)
+            if (_config.IsShowEnterInfo == false)
             {
                 _isAniming = false;
                 return;
             }
             
-            var avoidList = ConfigDataMgr.Instance.Data.AvoidNameKeyWordList;
+            var avoidList = _config.AvoidNameKeyWordList;
             //被屏蔽的用户不显示
             foreach (var avoidName in avoidList)
             {
@@ -278,7 +278,7 @@ namespace DLiveTool
 
             //段落类
             Paragraph para = new Paragraph();
-            para.LineHeight = _model.FontSize;
+            para.LineHeight = _config.FontSize;
             para.Background = Brushes.Transparent;
             //文本添加到段落类子节点上
             para.Inlines.Add(nameRun);
@@ -286,7 +286,7 @@ namespace DLiveTool
 
             //FlowDocument类
             FlowDocument flowDocument = new FlowDocument();
-            flowDocument.FontSize = _model.FontSize;
+            flowDocument.FontSize = _config.FontSize;
             flowDocument.Background = Brushes.Transparent;
             //段落类 加到FlowDocument类子节点上
             flowDocument.Blocks.Add(para);
@@ -297,7 +297,7 @@ namespace DLiveTool
             //FlowDocument 加到 RichTexBox子结点上
             box.Document = flowDocument;
             box.Background = Brushes.Transparent;
-            box.Margin = new Thickness(0, 0, 0, _model.LinePadding);
+            box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
             //添加到父节点上
             _mainPanel.Children.Add(box);
 
@@ -308,9 +308,9 @@ namespace DLiveTool
             box.Loaded += (s, e) =>
             {
                 //组件加载完成后播放动画
-                _anim.From = box.ActualHeight + _model.LinePadding;
+                _anim.From = box.ActualHeight + _config.LinePadding;
                 _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(_model.RollAnimTime);
+                _anim.Duration = TimeSpan.FromMilliseconds(_config.RollAnimTime);
                 rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
             };
         }
@@ -338,7 +338,7 @@ namespace DLiveTool
 
             //段落类
             Paragraph para = new Paragraph();
-            para.LineHeight = _model.FontSize;
+            para.LineHeight = _config.FontSize;
             para.Background = Brushes.Transparent;
             //文本添加到段落类子节点上
             para.Inlines.Add(nameRun);
@@ -348,7 +348,7 @@ namespace DLiveTool
 
             //FlowDocument类
             FlowDocument flowDocument = new FlowDocument();
-            flowDocument.FontSize = _model.FontSize;
+            flowDocument.FontSize = _config.FontSize;
             flowDocument.Background = Brushes.Transparent;
             //段落类 加到FlowDocument类子节点上
             flowDocument.Blocks.Add(para);
@@ -359,20 +359,19 @@ namespace DLiveTool
             //FlowDocument 加到 RichTexBox子结点上
             box.Document = flowDocument;
             box.Background = Brushes.Transparent;
-            box.Margin = new Thickness(0, 0, 0, _model.LinePadding);
+            box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
             //添加到父节点上
             _mainPanel.Children.Add(box);
 
             //保存到数据结构中
             _model.AddRichTexBox(box);
 
-
             box.Loaded += (s, e) =>
             {
                 //组件加载完成后播放动画
-                _anim.From = box.ActualHeight + _model.LinePadding;
+                _anim.From = box.ActualHeight + _config.LinePadding;
                 _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(_model.RollAnimTime);
+                _anim.Duration = TimeSpan.FromMilliseconds(_config.RollAnimTime);
                 rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
             };
         }
