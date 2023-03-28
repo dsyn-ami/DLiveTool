@@ -1,0 +1,42 @@
+﻿<Page x:Class="DLiveTool.DanmakuWindowSettingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DLiveTool"
+      mc:Ignorable="d" 
+      d:DesignHeight="375" d:DesignWidth="650"
+      Title="DanmakuWindowSettingPage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="12"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="150"/>
+        </Grid.ColumnDefinitions>
+        <!--开启弹幕窗口按钮-->
+        <Button Grid.Row="1" x:Name="_openBtn" Margin="90, 3, 90, 3" Background="LightGray" Content="打开弹幕窗口" Click="OpenBtn_Click"/>
+        
+        <!--右侧进入直播间消息屏蔽设置-->
+        <CheckBox x:Name="_showEnterCheckBox" Grid.Row="1" Grid.Column="1" Content="进入直播间消息" Checked="OnShowEnterChecked" Unchecked="OnShowEnterUnChecked" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Label Content="屏蔽用户名关键词" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBox x:Name="_avoidKeyInput" Grid.Row="3" Grid.Column="1" MaxLines="1" Margin="15, 3, 15, 3"/>
+        <Grid Grid.Row="4" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="_addAvoidKeyBtn" Margin="15, 3, 10, 3" Click="OnAddAvoidKeyBtnClick">+</Button>
+            <Button x:Name="_removeAvoidKeyBtn" Grid.Column="1" Margin="10, 3, 15, 3" Click="OnRemoveAvoidKeyBtnClick">-</Button>
+        </Grid>
+        <ListBox x:Name="_avoidKeyListBox" Grid.Row="5" Grid.Column="1" Margin="15, 3, 15, 10">
+        </ListBox>
+    </Grid>
+</Page>

@@ -34,7 +34,7 @@ namespace dsyn
                 fileStream = null;
                 return true;
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }

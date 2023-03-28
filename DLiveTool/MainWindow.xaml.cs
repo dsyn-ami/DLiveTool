@@ -25,12 +25,14 @@ namespace DLiveTool
     /// </summary>
     public partial class MainWindow : Window
     {
+        DanmakuWindowSettingPage _danmakuSettingPage;
         public MainWindow()
         {
             InitializeComponent();
-
             //初始化缓存
             DCache.Init();
+            //初始化子页面
+            _danmakuSettingPage = new DanmakuWindowSettingPage();
 
             //刷新窗口
             Refresh();
@@ -40,19 +42,8 @@ namespace DLiveTool
         {
             var data = ConfigDataMgr.Instance.Data;
             _roomIdInput.Text = data.RoomId;
-            _showEnterCheckBox.IsChecked = data.DanmakuWindowConfig.IsShowEnterInfo;
-
-            foreach (string avoidKey in data.DanmakuWindowConfig.AvoidNameKeyWordList)
-            {
-                _avoidKeyListBox.Items.Add(avoidKey);
-            }
-        }
-
-        private void OpenBtn_Click(object sender, RoutedEventArgs e)
-        {
-            DanmakuWindow danmakuWindow = new DanmakuWindow();
-            danmakuWindow.Owner = this;
-            danmakuWindow.Show();
+            //设置子Page
+            _mainContent.Content = _danmakuSettingPage;
         }
 
         private void OnConnectBtnClick(object sender, RoutedEventArgs e)
@@ -80,7 +71,7 @@ namespace DLiveTool
                 _connectBtn.IsEnabled = false;
                 try
                 {
-                    DConnection.ConnectAsync(roomId, (code, msg) =>
+                    DConnection.Connect(roomId, (code, msg) =>
                     {
                         if (code != 0)
                         {
@@ -161,46 +152,6 @@ namespace DLiveTool
         private void UpdateText(ContentControl contentItem, string value)
         {
             contentItem.Content = value;
-        }
-
-        private void OnShowEnterChecked(object sender, RoutedEventArgs e)
-        {
-            ConfigDataMgr.Instance.Data.DanmakuWindowConfig.IsShowEnterInfo = true;
-            ConfigDataMgr.Instance.SaveData();
-        }
-
-        private void OnShowEnterUnChecked(object sender, RoutedEventArgs e)
-        {
-            ConfigDataMgr.Instance.Data.DanmakuWindowConfig.IsShowEnterInfo = false;
-            ConfigDataMgr.Instance.SaveData();
-        }
-
-        private void OnAddAvoidKeyBtnClick(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(_avoidKeyInput.Text))
-            {
-                string addKey = _avoidKeyInput.Text;
-                var curList = ConfigDataMgr.Instance.Data.DanmakuWindowConfig.AvoidNameKeyWordList;
-                if (!curList.Contains(addKey))
-                {
-                    curList.Add(addKey);
-                    _avoidKeyInput.Text = String.Empty;
-                    _avoidKeyListBox.Items.Add(addKey);
-                    ConfigDataMgr.Instance.SaveData();
-                }
-            }
-        }
-
-        private void OnRemoveAvoidKeyBtnClick(object sender, RoutedEventArgs e)
-        {
-            var curList = ConfigDataMgr.Instance.Data.DanmakuWindowConfig.AvoidNameKeyWordList;
-            object selectedItem = _avoidKeyListBox.SelectedItem;
-            if(selectedItem != null)
-            {
-                curList.Remove(selectedItem.ToString());
-                _avoidKeyListBox.Items.Remove(selectedItem);
-                ConfigDataMgr.Instance.SaveData();
-            }
         }
     }
 }

@@ -22,7 +22,7 @@ namespace DLiveTool
         /// </summary>
         /// <param name="roomId"></param>
         /// <param name="onConnected"></param>
-        public static async void ConnectAsync(string roomId, Action<int, string> onConnected)
+        public static void Connect(string roomId, Action<int, string> onConnected)
         {
             if (State == ConnectState.Connected && State == ConnectState.Connecting) return;
             State = ConnectState.Connecting;
