@@ -171,6 +171,7 @@ namespace DLiveTool
             box.Document = flowDocument;
             box.Background = Brushes.Transparent;
             box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
+            box.IsReadOnly = true;
             //添加到父节点上
             _mainPanel.Children.Add(box);
 
@@ -226,6 +227,7 @@ namespace DLiveTool
             box.Document = flowDocument;
             box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
             box.Background = Brushes.Transparent;
+            box.IsReadOnly = true;
             //添加到父节点上
             _mainPanel.Children.Add(box);
 
@@ -298,6 +300,7 @@ namespace DLiveTool
             box.Document = flowDocument;
             box.Background = Brushes.Transparent;
             box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
+            box.IsReadOnly = true;
             //添加到父节点上
             _mainPanel.Children.Add(box);
 
@@ -360,6 +363,7 @@ namespace DLiveTool
             box.Document = flowDocument;
             box.Background = Brushes.Transparent;
             box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
+            box.IsReadOnly = true;
             //添加到父节点上
             _mainPanel.Children.Add(box);
 
@@ -376,5 +380,10 @@ namespace DLiveTool
             };
         }
         #endregion
+
+        private void OnMouseLeftBtnDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
     }
 }

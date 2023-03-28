@@ -41,7 +41,7 @@ namespace DLiveTool
             }
             catch (Exception)
             {
-                MessageBox.Show($"load voice failed : \njson : {responseJson} \nurl : {audioUrl}");
+                //MessageBox.Show($"load voice failed : \njson : {responseJson} \nurl : {audioUrl}");
      ;          return false;
             }
 

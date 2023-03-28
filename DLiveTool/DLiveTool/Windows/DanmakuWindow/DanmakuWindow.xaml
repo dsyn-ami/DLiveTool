@@ -6,14 +6,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DLiveTool"
         mc:Ignorable="d"
-        Title="Danmaku" Height="600" Width="450">
+        Title="Danmaku" Height="600" Width="450"
+        WindowStyle="None" AllowsTransparency="true" Background="Transparent" MouseLeftButtonDown="OnMouseLeftBtnDown">
     <Window.Resources>
         <LinearGradientBrush x:Key="bgBrush">
             <GradientStop Color="LightBlue" Offset="0"/>
             <GradientStop Color="LightPink" Offset="1"/>
         </LinearGradientBrush>
+        <SolidColorBrush x:Key="transparentBrush" Color="Black" Opacity="0.5">
+        </SolidColorBrush>
     </Window.Resources>
-    <Grid Background="{StaticResource ResourceKey=bgBrush}">
+    <Grid Background="{StaticResource ResourceKey=transparentBrush}">
         <StackPanel x:Name="_mainPanel" Background="Transparent" VerticalAlignment="Bottom" FlowDirection="LeftToRight" RenderTransformOrigin="0.5,0.5">
             <StackPanel.RenderTransform>
                 <TranslateTransform x:Name="rootTrans"/>
