@@ -39,11 +39,22 @@ namespace DLiveTool
         }
 
         #region 控件事件
+        DanmakuWindow _curDanmakuWindow;
         private void OpenBtn_Click(object sender, RoutedEventArgs e)
         {
-            DanmakuWindow danmakuWindow = new DanmakuWindow();
-            danmakuWindow.Owner = Application.Current.MainWindow;
-            danmakuWindow.Show();
+            if(_curDanmakuWindow == null)
+            {
+                _curDanmakuWindow = new DanmakuWindow();
+                _curDanmakuWindow.Owner = Application.Current.MainWindow;
+                _curDanmakuWindow.Show();
+                _openBtn.Content = "关闭弹幕窗口";
+            }
+            else
+            {
+                _curDanmakuWindow.Close();
+                _curDanmakuWindow = null;
+                _openBtn.Content = "打开弹幕窗口";
+            }
         }
         private void OnShowEnterChecked(object sender, RoutedEventArgs e)
         {

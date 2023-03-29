@@ -42,11 +42,9 @@ namespace DLiveTool
             catch (Exception)
             {
                 //MessageBox.Show($"load voice failed : \njson : {responseJson} \nurl : {audioUrl}");
-     ;          return false;
+                return false;
             }
-
         }
-
         public static async Task<bool> RequsetTtsAsync(TtsInstance instance)
         {
             Dictionary<string, string> _dict = new Dictionary<string, string>();

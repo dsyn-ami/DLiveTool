@@ -22,8 +22,11 @@
             <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
         <!--开启弹幕窗口按钮-->
-        <Button Grid.Row="1" x:Name="_openBtn" Margin="90, 3, 90, 3" Background="LightGray" Content="打开弹幕窗口" Click="OpenBtn_Click"/>
-        
+        <Button Grid.Row="1" x:Name="_openBtn" Margin="180, 3, 180, 3" Background="LightGray" Content="打开弹幕窗口" Click="OpenBtn_Click"/>
+        <!--左侧基本设置-->
+        <StackPanel Grid.Row="2" Grid.RowSpan="99">
+            
+        </StackPanel>
         <!--右侧进入直播间消息屏蔽设置-->
         <CheckBox x:Name="_showEnterCheckBox" Grid.Row="1" Grid.Column="1" Content="进入直播间消息" Checked="OnShowEnterChecked" Unchecked="OnShowEnterUnChecked" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <Label Content="屏蔽用户名关键词" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
