@@ -42,8 +42,8 @@
             </Border>
             <Label x:Name="_userName" Grid.Row="1" Content="用户名" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="房间号 :" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"  FontSize="18" />
-            <TextBox x:Name="_roomIdInput" Grid.Row="1" Grid.Column="2" Margin="5, 7, 5, 7" FontSize="16" MaxLines="1" TextAlignment="Center"/>
-            <Button x:Name="_connectBtn" Grid.Row="1" Grid.Column="3" Click="OnConnectBtnClick" Margin="10, 8, 10, 8" Content="连接" FontSize="16"/>
+            <TextBox x:Name="_roomIdInput" Background="Transparent" Grid.Row="1" Grid.Column="2" Margin="5, 7, 5, 7" FontSize="16" MaxLines="1" TextAlignment="Center"/>
+            <Button x:Name="_connectBtn" Background="Transparent" Grid.Row="1" Grid.Column="3" Click="OnConnectBtnClick" Margin="10, 8, 10, 8" Content="连接" FontSize="16"/>
         </Grid>
 
         <Grid Grid.Row="1">
