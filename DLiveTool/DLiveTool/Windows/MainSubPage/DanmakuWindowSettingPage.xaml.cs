@@ -20,6 +20,8 @@ namespace DLiveTool
     /// </summary>
     public partial class DanmakuWindowSettingPage : Page
     {
+        DanmakuWindowConfig _config = ConfigDataMgr.Instance.Data.DanmakuWindowConfig;
+
         public DanmakuWindowSettingPage()
         {
             InitializeComponent();
@@ -36,6 +38,11 @@ namespace DLiveTool
             {
                 _avoidKeyListBox.Items.Add(avoidKey);
             }
+
+            _fontSizeInput.Text = _config.FontSize.ToString();
+            _linePaddingInput.Text = _config.LinePadding.ToString();
+            _maxItemCountInput.Text = _config.MaxItemCount.ToString();
+            _rollAnimTimeInput.Text = _config.RollAnimTime.ToString();
         }
 
         #region 控件事件
@@ -64,7 +71,7 @@ namespace DLiveTool
 
         private void OnShowEnterUnChecked(object sender, RoutedEventArgs e)
         {
-            ConfigDataMgr.Instance.Data.DanmakuWindowConfig.IsShowEnterInfo = false;
+            _config.IsShowEnterInfo = false;
             ConfigDataMgr.Instance.SaveData();
         }
         private void OnAddAvoidKeyBtnClick(object sender, RoutedEventArgs e)
@@ -72,7 +79,7 @@ namespace DLiveTool
             if (!string.IsNullOrEmpty(_avoidKeyInput.Text))
             {
                 string addKey = _avoidKeyInput.Text;
-                var curList = ConfigDataMgr.Instance.Data.DanmakuWindowConfig.AvoidNameKeyWordList;
+                var curList = _config.AvoidNameKeyWordList;
                 if (!curList.Contains(addKey))
                 {
                     curList.Add(addKey);
@@ -85,13 +92,72 @@ namespace DLiveTool
 
         private void OnRemoveAvoidKeyBtnClick(object sender, RoutedEventArgs e)
         {
-            var curList = ConfigDataMgr.Instance.Data.DanmakuWindowConfig.AvoidNameKeyWordList;
+            var curList = _config.AvoidNameKeyWordList;
             object selectedItem = _avoidKeyListBox.SelectedItem;
             if (selectedItem != null)
             {
                 curList.Remove(selectedItem.ToString());
                 _avoidKeyListBox.Items.Remove(selectedItem);
                 ConfigDataMgr.Instance.SaveData();
+            }
+        }
+        private void OnMaxItemCountChanged(object sender, RoutedEventArgs e)
+        {
+            string input = _maxItemCountInput.Text;
+            if (int.TryParse(input, out int value))
+            {
+                _maxItemCountInput.Text = value.ToString();
+                _config.MaxItemCount = value;
+                ConfigDataMgr.Instance.SaveData();
+            }
+            else
+            {
+                _maxItemCountInput.Text = _config.MaxItemCount.ToString();
+            }
+        }
+
+        private void OnRollAnimTimeChanged(object sender, RoutedEventArgs e)
+        {
+            string input = _rollAnimTimeInput.Text;
+            if (int.TryParse(input, out int value))
+            {
+                _rollAnimTimeInput.Text = value.ToString();
+                _config.RollAnimTime = value;
+                ConfigDataMgr.Instance.SaveData();
+            }
+            else
+            {
+                _rollAnimTimeInput.Text = _config.RollAnimTime.ToString();
+            }
+        }
+
+        private void OnFontSizeChanged(object sender, RoutedEventArgs e)
+        {
+            string input = _fontSizeInput.Text;
+            if (int.TryParse(input, out int value))
+            {
+                _fontSizeInput.Text = value.ToString();
+                _config.FontSize = value;
+                ConfigDataMgr.Instance.SaveData();
+            }
+            else
+            {
+                _fontSizeInput.Text = _config.FontSize.ToString();
+            }
+        }
+
+        private void OnLinePaddingChanged(object sender, RoutedEventArgs e)
+        {
+            string input = _linePaddingInput.Text;
+            if (int.TryParse(input, out int value))
+            {
+                _linePaddingInput.Text = value.ToString();
+                _config.LinePadding = value;
+                ConfigDataMgr.Instance.SaveData();
+            }
+            else
+            {
+                _linePaddingInput.Text = _config.LinePadding.ToString();
             }
         }
         #endregion

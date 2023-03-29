@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DLiveTool\WebSocket\**" />
+    <Compile Remove="TestChatGPT\**" />
+    <EmbeddedResource Remove="DLiveTool\WebSocket\**" />
+    <EmbeddedResource Remove="TestChatGPT\**" />
+    <None Remove="DLiveTool\WebSocket\**" />
+    <None Remove="TestChatGPT\**" />
+    <Page Remove="DLiveTool\WebSocket\**" />
+    <Page Remove="TestChatGPT\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BrotliSharpLib" Version="0.3.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>

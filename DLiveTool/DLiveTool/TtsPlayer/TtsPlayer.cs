@@ -85,6 +85,8 @@ namespace DLiveTool
         /// <param name="text"></param>
         public void AddPlayInstance(string text)
         {
+            //暂时关闭语音播报
+            //return;
             //等待队列大于5，不再生成语音
             if (_playQueue.Count > 5) return;
 
