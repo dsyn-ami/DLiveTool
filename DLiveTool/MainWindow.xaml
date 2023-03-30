@@ -64,7 +64,6 @@
                     <Button Background="Transparent" Content="别的设置" BorderThickness="0"/>
                 </Border>
             </StackPanel>
-            
             <!--显示子面板区域-->
             <Border Grid.Column="2" Background="LightBlue" CornerRadius="10" Margin="5">
                 <Frame x:Name="_mainContent"/>
