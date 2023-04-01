@@ -27,6 +27,9 @@ namespace DLiveTool
             InitializeComponent();
 
             Refresh();
+
+            _backgroundColor.OnColorChanged += OnBackgroundColorChanged;
+            _backgroundColor.OnPanelClosed += OnBackgroundColorConfirm;
         }
 
         private void Refresh()
@@ -43,6 +46,8 @@ namespace DLiveTool
             _linePaddingInput.Text = _config.LinePadding.ToString();
             _maxItemCountInput.Text = _config.MaxItemCount.ToString();
             _rollAnimTimeInput.Text = _config.RollAnimTime.ToString();
+
+            _backgroundColor.SetColor(_config.BGColorA, _config.BGColorR, _config.BGColorG, _config.BGColorB);
         }
 
         #region 控件事件
@@ -158,6 +163,22 @@ namespace DLiveTool
             else
             {
                 _linePaddingInput.Text = _config.LinePadding.ToString();
+            }
+        }
+        private void OnBackgroundColorConfirm(Color obj)
+        {
+            ConfigDataMgr.Instance.SaveData();
+        }
+
+        private void OnBackgroundColorChanged(Color obj)
+        {
+            _config.BGColorA = obj.A;
+            _config.BGColorR = obj.R;
+            _config.BGColorG = obj.G;
+            _config.BGColorB = obj.B;
+            if(_curDanmakuWindow != null)
+            {
+                _curDanmakuWindow.SetBackgroundColor(obj);
             }
         }
         #endregion

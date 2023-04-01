@@ -36,5 +36,11 @@ namespace DLiveTool
         /// 滚动动画持续时间 ms
         /// </summary>
         public int RollAnimTime = 150;
+
+        //背景颜色
+        public byte BGColorA;
+        public byte BGColorR;
+        public byte BGColorG;
+        public byte BGColorB;
     }
 }

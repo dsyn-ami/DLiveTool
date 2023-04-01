@@ -9,14 +9,9 @@
         Title="Danmaku" Height="600" Width="450"
         WindowStyle="None" AllowsTransparency="true" Background="Transparent" MouseLeftButtonDown="OnMouseLeftBtnDown">
     <Window.Resources>
-        <LinearGradientBrush x:Key="bgBrush">
-            <GradientStop Color="LightBlue" Offset="0"/>
-            <GradientStop Color="LightPink" Offset="1"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="transparentBrush" Color="Black" Opacity="0.5">
-        </SolidColorBrush>
+        <SolidColorBrush x:Key="bgBrush" Color="Black"/>
     </Window.Resources>
-    <Grid Background="{StaticResource ResourceKey=transparentBrush}">
+    <Grid Background="{DynamicResource ResourceKey=bgBrush}">
         <StackPanel x:Name="_mainPanel" Background="Transparent" VerticalAlignment="Bottom" FlowDirection="LeftToRight" RenderTransformOrigin="0.5,0.5">
             <StackPanel.RenderTransform>
                 <TranslateTransform x:Name="rootTrans"/>

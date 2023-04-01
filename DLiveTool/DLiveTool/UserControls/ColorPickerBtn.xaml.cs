@@ -20,7 +20,8 @@ namespace DLiveTool
     /// ColorControlBtn.xaml 的交互逻辑
     /// </summary>
     public partial class ColorControlBtn : UserControl
-    { 
+    {
+        public RoutedEventHandler OnEvent;
         public Action<Color> OnColorChanged;
         public Action<Color> OnPanelClosed;
         /// <summary>
@@ -115,6 +116,10 @@ namespace DLiveTool
 
             var brush = Resources["ColorToTransParentBrush"] as LinearGradientBrush;
             brush.GradientStops[1].Color = Color.FromRgb(_curR, _curG, _curB);
+
+            _changColorBtn.Background = new SolidColorBrush(_curColor);
+            //触发回调
+            OnColorChanged?.Invoke(_curColor);
         }
         /// <summary>
         /// 通过hsv设置颜色,不会更新 选色滑块的位置,
@@ -143,6 +148,8 @@ namespace DLiveTool
 
             var brush = Resources["ColorToTransParentBrush"] as LinearGradientBrush;
             brush.GradientStops[1].Color = Color.FromRgb(_curR, _curG, _curB);
+
+            _changColorBtn.Background = new SolidColorBrush(_curColor);
             //触发回调
             OnColorChanged?.Invoke(_curColor);
         }
@@ -164,6 +171,7 @@ namespace DLiveTool
             {
                 _colorPickerPanel.Visibility = Visibility.Collapsed;
                 _state = ControlState.Normal;
+                OnPanelClosed?.Invoke(_curColor);
             }
         }
         #region 事件函数

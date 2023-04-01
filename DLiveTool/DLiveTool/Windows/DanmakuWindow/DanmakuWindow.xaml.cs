@@ -34,9 +34,19 @@ namespace DLiveTool
             _config = ConfigDataMgr.Instance.Data.DanmakuWindowConfig;
             _anim.Completed += Anim_Completed;
 
+            SetBackgroundColor(Color.FromArgb(_config.BGColorA, _config.BGColorR, _config.BGColorG, _config.BGColorB));
+
             DConnection.BiliWS.OnReceiveDanmaku += AddMsgToQueue;
             DConnection.BiliWS.OnUserEnter += AddMsgToQueue;
             DConnection.BiliWS.OnReceiveGift += AddMsgToQueue;
+        }
+        /// <summary>
+        /// 设置背景颜色
+        /// </summary>
+        /// <param name="color"></param>
+        public void SetBackgroundColor(Color color)
+        {
+            (Resources["bgBrush"] as SolidColorBrush).Color = color;
         }
 
         private void Anim_Completed(object sender, EventArgs e)

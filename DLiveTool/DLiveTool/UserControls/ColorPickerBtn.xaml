@@ -53,8 +53,11 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Background="#FFF51A1A">
-        <Button x:Name="_changColorBtn" Click="OnColorBtnClicked" Background="White" BorderThickness="2" BorderBrush="Brown"/>
+    <Grid Background="White">
+        
+        <Rectangle Fill="{StaticResource TransparentBackground}"/>
+        <Button x:Name="_changColorBtn" Click="OnColorBtnClicked" Background="White" BorderThickness="1" BorderBrush="Black"/>
+        
         <Canvas Width="220" Height="150" x:Name="_colorPickerPanel" Visibility="Visible" Margin="35, 0, 0, 0">
             <Grid Width="220" Height="150" Background="AliceBlue">
                 <Grid.RowDefinitions>
