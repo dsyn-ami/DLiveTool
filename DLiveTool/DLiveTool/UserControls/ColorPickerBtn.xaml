@@ -9,7 +9,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <!--色环笔刷-->
-            <LinearGradientBrush x:Key="ColorPickerRainbowBrush"  StartPoint="1,0" EndPoint="1,1">
+            <LinearGradientBrush x:Key="ColorPickerRainbowBrush"  StartPoint="1,1" EndPoint="1,0">
                 <GradientStop Color="#ff0000"/>
                 <GradientStop Color="#ff00ff" Offset="0.167"/>
                 <GradientStop Color="#0000ff" Offset="0.334"/>
@@ -53,7 +53,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="#FFF51A1A">
         <Button x:Name="_changColorBtn" Click="OnColorBtnClicked" Background="White" BorderThickness="2" BorderBrush="Brown"/>
         <Canvas Width="220" Height="150" x:Name="_colorPickerPanel" Visibility="Visible" Margin="35, 0, 0, 0">
             <Grid Width="220" Height="150" Background="AliceBlue">
@@ -69,21 +69,18 @@
                     <ColumnDefinition Width="30"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                
+                <!--让其他控件失去焦点的Label-->
+                <TextBox x:Name="_focusLabel" Margin="10"/>
                 <!--颜色选择区域-->
-                <Canvas Grid.RowSpan="4" Margin="5">
+                <Canvas MouseLeftButtonDown="OnPickAreaMouseDown" MouseLeftButtonUp="OnPickAreaMouseUp" MouseMove="OnPickAreaMouseMove" Grid.RowSpan="4" Margin="5">
                     <Rectangle x:Name="_mainColorRect" Width="110" Height="110" Grid.RowSpan="4" Fill="Red"></Rectangle>
                     <Rectangle Width="110" Height="110" Grid.RowSpan="4" Fill="{StaticResource WhiteToTransParentBrush}"></Rectangle>
                     <Rectangle Width="110" Height="110" Grid.RowSpan="4" Fill="{StaticResource BlackToTransParentBrush}"></Rectangle>
-                    <Ellipse Width="10" Height="10" Canvas.Top="15" Canvas.Left="95" Margin="-5, -5, 0, 0" Stroke="Black" StrokeThickness="1"/>
-                    <TextBox x:Name="_testValue" Canvas.Top="0"></TextBox>
-                    <TextBox x:Name="_testIndex" Canvas.Top="20"></TextBox>
-                    <TextBox x:Name="_testLerpValue" Canvas.Top="40"></TextBox>
-                    <TextBox x:Name="_testPosY" Canvas.Top="60"></TextBox>
+                    <Ellipse x:Name="_pickCircle" Width="10" Height="10" Canvas.Top="15" Canvas.Left="95" Margin="-5, -5, 0, 0" Stroke="Black" StrokeThickness="1"/>
                 </Canvas>
                 <!--色相选择区域-->
                 <Canvas Grid.Column="1" MouseLeftButtonDown="OnColorRingMouseDown" MouseLeftButtonUp="OnColorRingMouseUp" MouseMove="OnColorRingMouseMove" Grid.RowSpan="4" Margin="5">
-                    <Rectangle Stretch="Fill" Fill="{DynamicResource ResourceKey=ColorPickerRainbowBrush}" Height="110" Canvas.Left="0" Canvas.Top="0" Width="20"/>
+                    <Rectangle Stretch="Fill" Fill="{DynamicResource ResourceKey=ColorPickerRainbowBrush}" Height="110" Width="20"/>
                     <StackPanel x:Name="_colorRingSelectBar" Orientation="Horizontal" Canvas.Top="0" Width="30">
                         <Polygon Points="-5,-5, 0,0 -5,5" Fill="Black"/>
                         <Label Width="20"/>
@@ -91,28 +88,38 @@
                     </StackPanel>
                 </Canvas>
                 <!--透明度选择区域-->
-                <Rectangle Grid.Row="4" Margin="5" Fill="{DynamicResource ResourceKey=TransparentBackground}" StrokeThickness="0" Stroke="LightGray"></Rectangle>
-                <Rectangle Grid.Row="4" Margin="5" Fill="{DynamicResource ColorToTransParentBrush}"/>
+                <Canvas MouseLeftButtonDown="OnAlphaAreaMouseDown" MouseLeftButtonUp="OnAlphaAreaMouseUp" MouseMove="OnAlphaAreaMouseMove" Grid.Row="4" Margin="5">
+                    <Rectangle Height="20" Width="110" Fill="{DynamicResource ResourceKey=TransparentBackground}" StrokeThickness="0" Stroke="LightGray"></Rectangle>
+                    <Rectangle Height="20" Width="110" Fill="{DynamicResource ColorToTransParentBrush}"/>
+                    <StackPanel x:Name="_colorAlphaSelectBar" Canvas.Left="110" Height="30">
+                        <Polygon Points="5,-5, 0,0 -5,-5" Fill="Black"/>
+                        <Label Height="20"/>
+                        <Polygon Points="-5,5, 5,5 0,0" Fill="Black"/>
+                    </StackPanel>
+                </Canvas>
+
                 <!--颜色填写区域-->
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
                     <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center">R</Label>
-                    <TextBox x:Name="_textR" Width="47" Margin="0, 5, 5, 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">255</TextBox>
+                    <TextBox x:Name="_textR" KeyDown="CheckIfEnterDown" LostFocus="OnREndEdit" Width="47" Margin="0, 5, 5, 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">255</TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
                     <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center">G</Label>
-                    <TextBox x:Name="_textG" Width="47" Margin="0, 5, 5, 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">255</TextBox>
+                    <TextBox x:Name="_textG" KeyDown="CheckIfEnterDown" LostFocus="OnGEndEdit" Width="47" Margin="0, 5, 5, 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">255</TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2">
                     <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center">B</Label>
-                    <TextBox x:Name="_textB" Width="47" Margin="0, 5, 5, 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">255</TextBox>
+                    <TextBox x:Name="_textB" KeyDown="CheckIfEnterDown" LostFocus="OnBEndEdit" Width="47" Margin="0, 5, 5, 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">255</TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="2">
                     <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center">A</Label>
-                    <TextBox x:Name="_textA" Width="47" Margin="0, 5, 5, 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">255</TextBox>
+                    <TextBox x:Name="_textA" KeyDown="CheckIfEnterDown" LostFocus="OnAEndEdit" Width="47" Margin="0, 5, 5, 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">255</TextBox>
                 </StackPanel>
-                <TextBox Margin="5" Grid.Row="4" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">#E2C7D5</TextBox>
+                <TextBox x:Name="_textColor" KeyDown="CheckIfEnterDown" LostFocus="OnColorEndEdit" Margin="5" Grid.Row="4" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">#E2C7D5</TextBox>
                 <!--颜色预览区域-->
-                <Rectangle Grid.Row="4" Grid.Column="1" Margin="5" Fill="Red"></Rectangle>
+                <Rectangle Grid.Row="4" Grid.Column="1" Margin="5" Fill="{StaticResource TransparentBackground}"></Rectangle>
+                <Rectangle x:Name="_overviewColor" Grid.Row="4" Grid.Column="1" Margin="5" Fill="Red"></Rectangle>
+
             </Grid>
         </Canvas>
     </Grid>
