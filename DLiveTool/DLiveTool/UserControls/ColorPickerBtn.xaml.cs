@@ -533,6 +533,12 @@ namespace DLiveTool
                 rgb.Y = p;
                 rgb.Z = q;
             }
+            else if (colorIndex == 6)
+            {
+                rgb.X = v;
+                rgb.Y = t;
+                rgb.Z = p;
+            }
             byte[] result = new byte[3];
             result[0] = (byte)(rgb.X * 255);
             result[1] = (byte)(rgb.Y * 255);
