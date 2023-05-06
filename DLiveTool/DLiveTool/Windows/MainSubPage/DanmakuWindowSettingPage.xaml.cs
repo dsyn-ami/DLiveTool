@@ -46,6 +46,7 @@ namespace DLiveTool
             _linePaddingInput.Text = _config.LinePadding.ToString();
             _maxItemCountInput.Text = _config.MaxItemCount.ToString();
             _rollAnimTimeInput.Text = _config.RollAnimTime.ToString();
+            _itemAliveTimeInput.Text = _config.ItemAliveTime.ToString();
 
             _backgroundColor.SetColor(_config.BGColorA, _config.BGColorR, _config.BGColorG, _config.BGColorB);
         }
@@ -133,6 +134,21 @@ namespace DLiveTool
             else
             {
                 _rollAnimTimeInput.Text = _config.RollAnimTime.ToString();
+            }
+        }
+
+        private void OnItemAliveTimeChanged(object sender, RoutedEventArgs e)
+        {
+            string input = _itemAliveTimeInput.Text;
+            if (int.TryParse(input, out int value))
+            {
+                _itemAliveTimeInput.Text = value.ToString();
+                _config.ItemAliveTime = value;
+                ConfigDataMgr.Instance.SaveData();
+            }
+            else
+            {
+                _itemAliveTimeInput.Text = _config.ItemAliveTime.ToString();
             }
         }
 

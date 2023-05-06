@@ -15,7 +15,11 @@ namespace DLiveTool
         /// <summary>
         /// 最大显示消息数量
         /// </summary>
-        public int MaxItemCount = 20;
+        public int MaxItemCount = 30;
+        /// <summary>
+        /// 消息显示时间
+        /// </summary>
+        public int ItemAliveTime = 30;
         /// <summary>
         /// 是否显示进入直播间信息
         /// </summary>

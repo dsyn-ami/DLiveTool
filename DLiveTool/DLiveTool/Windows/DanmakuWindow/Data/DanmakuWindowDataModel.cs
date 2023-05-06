@@ -27,11 +27,25 @@ namespace DLiveTool
         public void AddRichTexBox(RichTextBox box)
         {
             _items.Add(box);
+            //延迟销毁
+            DelayDestroyAsync(_config.ItemAliveTime, box);
+            //超过最大值销毁
             if(_items.Count > _config.MaxItemCount)
             {
                 RichTextBox removeBox = _items[0];
                 _patentPanel.Children.Remove(removeBox);
                 _items.RemoveAt(0);
+            }
+        }
+
+        private async void DelayDestroyAsync(float delayTime, RichTextBox box)
+        {
+            int delayTimeM = (int)(delayTime * 1000);
+            await Task.Delay(delayTimeM);
+            if (_items.Contains(box))
+            {
+                _patentPanel.Children.Remove(box);
+                _items.Remove(box);
             }
         }
     }
