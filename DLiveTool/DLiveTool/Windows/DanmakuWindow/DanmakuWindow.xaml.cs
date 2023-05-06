@@ -127,7 +127,7 @@ namespace DLiveTool
                 //如果本地没有缓存,先下载图片,并写入本地缓存
                 if (string.IsNullOrEmpty(DCache.GetImageCache(fileName)))
                 {
-                    System.Net.HttpWebResponse response = await BiliRequester.HttpGet(data.Emoticon.ImgUrl);
+                    System.Net.HttpWebResponse response = await BiliRequester.HttpGetAsync(data.Emoticon.ImgUrl);
                     //读取字节流,并写入本地文件
 
                     using (Stream stream = response.GetResponseStream())

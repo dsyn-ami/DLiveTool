@@ -136,7 +136,7 @@ namespace DLiveTool
             //本地没有缓存，下载，并保存在本地
             if (string.IsNullOrEmpty(DCache.GetImageCache(fileName)))
             {
-                HttpWebResponse response = await BiliRequester.HttpGet(url);
+                HttpWebResponse response = await BiliRequester.HttpGetAsync(url);
                 Stream stream = response.GetResponseStream();
 
                 bool isSuccess = await FileWriter.WriteFileAsync(path, stream);

@@ -19,20 +19,20 @@ namespace DLiveTool
         /// </summary>
         /// <param name="roomId"></param>
         /// <returns></returns>
-        public static async Task<string> GetRoomInitInfo(string roomId)
+        public static async Task<string> GetRoomInitInfoAsync(string roomId)
         {
             string url = BiliAPI.RoomInitInfo + "?id=" + roomId;
-            return GetStringFromResponse(await HttpGet(url));
+            return GetStringFromResponse(await HttpGetAsync(url));
         }
         /// <summary>
         /// 请求用户基本信息
         /// </summary>
         /// <param name="UserId"></param>
         /// <returns></returns>
-        public static async Task<string> GetUserInfo(string UserId)
+        public static async Task<string> GetUserInfoAsync(string UserId)
         {
             string url = BiliAPI.UserInfo + "?mid=" + UserId;
-            return GetStringFromResponse(await HttpGet(url));
+            return GetStringFromResponse(await HttpGetAsync(url));
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace DLiveTool
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static async Task<HttpWebResponse> HttpGet(string url)
+        public static async Task<HttpWebResponse> HttpGetAsync(string url)
         {
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             request.Method = "GET";

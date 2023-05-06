@@ -1,12 +1,8 @@
 ﻿using BrotliSharpLib;
 using Newtonsoft.Json.Linq;
+using dsyn;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Net.WebSockets;
 using System.Text;
 using DLiveTool.Data;
@@ -59,7 +55,7 @@ namespace DLiveTool
         public async void ConnectAsync(string roomId, Action<int, string> OnConnected = null)
         {
             //获取房间基本信息
-            string roomInfo = await BiliRequester.GetRoomInitInfo(roomId);
+            string roomInfo = await BiliRequester.GetRoomInitInfoAsync(roomId);
             //保存房间信息
             JObject jObj = JObject.Parse(roomInfo);
 
@@ -77,9 +73,14 @@ namespace DLiveTool
             Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "获取房间基本信息 : " + roomInfo);
 
             //获取主播基本信息
-            string userInfo = await BiliRequester.GetUserInfo(AnchorData.UserId.Value);
+            //这里马上请求主播信息, 可能会返回请求过于频繁
+            string userInfoStr = await BiliRequester.GetUserInfoAsync(AnchorData.UserId.Value);
+            
+            //请求过于频繁时会返回两个json结构,如果有两个,使用第二个
+            JsonSpliter spliter = new JsonSpliter(userInfoStr);
+            string jsonStr = spliter[spliter.Count - 1];
+            jObj = JObject.Parse(jsonStr);
             //保存用户信息
-            jObj = JObject.Parse(userInfo);
             AnchorData.UserName.Value = jObj["data"]["name"].ToString();
             AnchorData.UserFace.Value = jObj["data"]["face"].ToString();
             AnchorData.TopPhoto.Value = jObj["data"]["top_photo"]?.ToString();
