@@ -30,6 +30,21 @@ namespace DLiveTool
         /// GET
         /// mid : 用户uid
         /// </summary>
+        [Obsolete("请使用GetUserInfo代替")]
         public const string UserInfo = "https://api.bilibili.com/x/space/acc/info";
+        /// <summary>
+        /// 获取用户基本信息
+        /// GET
+        /// mid : 用户UID
+                /// platform : "web"
+                /// web_location : "150101"
+        /// w_rid : wbi权鉴中特殊的字段, 通过某种加密算法生成
+        /// wts : wbi权鉴中特殊的字段, 秒级时间戳
+        /// </summary>
+        public const string GetUserInfo = "https://api.bilibili.com/x/space/wbi/acc/info";
+        /// <summary>
+        /// 获取导航栏用户信息, 响应数据包含用于计算 wbi签名 的实时口令 : data/wbi_img
+        /// </summary>
+        public const string NavInfo = "https://api.bilibili.com/x/web-interface/nav";
     }
 }

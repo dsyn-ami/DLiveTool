@@ -67,22 +67,18 @@ namespace DLiveTool
                 OnConnected?.Invoke(code, msg);
                 return;
             }
-            AnchorData.RoomId.Value = jObj["data"]["room_id"]?.ToString(); 
+            AnchorData.RoomId.Value = jObj["data"]["room_id"]?.ToString();
             AnchorData.UserId.Value = jObj["data"]["uid"]?.ToString();
             AnchorData.ShotRoomId.Value = jObj["data"]["short_id"]?.ToString();
             Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "获取房间基本信息 : " + roomInfo);
 
             //API有变化, 暂不获取主播信息
-            if (false)
+            if (true)
             {
                 //获取主播基本信息
-                //这里马上请求主播信息, 可能会返回请求过于频繁
                 string userInfoStr = await BiliRequester.GetUserInfoAsync(AnchorData.UserId.Value);
 
-                //请求过于频繁时会返回两个json结构,如果有两个,使用第二个
-                JsonSpliter spliter = new JsonSpliter(userInfoStr);
-                string jsonStr = spliter[spliter.Count - 1];
-                jObj = JObject.Parse(jsonStr);
+                jObj = JObject.Parse(userInfoStr);
                 //保存用户信息
                 AnchorData.UserName.Value = jObj["data"]["name"].ToString();
                 AnchorData.UserFace.Value = jObj["data"]["face"].ToString();
