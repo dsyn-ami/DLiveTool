@@ -72,24 +72,20 @@ namespace DLiveTool
             AnchorData.ShotRoomId.Value = jObj["data"]["short_id"]?.ToString();
             Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "获取房间基本信息 : " + roomInfo);
 
-            //API有变化, 暂不获取主播信息
-            if (true)
-            {
-                //获取主播基本信息
-                string userInfoStr = await BiliRequester.GetUserInfoAsync(AnchorData.UserId.Value);
+            //获取主播基本信息
+            string userInfoStr = await BiliRequester.GetUserInfoAsync(AnchorData.UserId.Value);
 
-                jObj = JObject.Parse(userInfoStr);
-                //保存用户信息
-                AnchorData.UserName.Value = jObj["data"]["name"].ToString();
-                AnchorData.UserFace.Value = jObj["data"]["face"].ToString();
-                AnchorData.TopPhoto.Value = jObj["data"]["top_photo"]?.ToString();
-                AnchorData.LiveState.Value = jObj["data"]["live_room"]["liveStatus"].ToString().Equals("1");
-                AnchorData.RoomUrl.Value = jObj["data"]["live_room"]["url"]?.ToString();
-                AnchorData.RoomTitle.Value = jObj["data"]["live_room"]["title"]?.ToString();
-                AnchorData.RoomCover.Value = jObj["data"]["live_room"]["cover"]?.ToString();
-                AnchorData.WatchedCount.Value = int.Parse(jObj["data"]["live_room"]["watched_show"]["num"]?.ToString());
-                Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "获取用户基本信息 : " + AnchorData.UserName.Value);
-            }
+            jObj = JObject.Parse(userInfoStr);
+            //保存用户信息
+            AnchorData.UserName.Value = jObj["data"]["name"].ToString();
+            AnchorData.UserFace.Value = jObj["data"]["face"].ToString();
+            AnchorData.TopPhoto.Value = jObj["data"]["top_photo"]?.ToString();
+            AnchorData.LiveState.Value = jObj["data"]["live_room"]["liveStatus"].ToString().Equals("1");
+            AnchorData.RoomUrl.Value = jObj["data"]["live_room"]["url"]?.ToString();
+            AnchorData.RoomTitle.Value = jObj["data"]["live_room"]["title"]?.ToString();
+            AnchorData.RoomCover.Value = jObj["data"]["live_room"]["cover"]?.ToString();
+            AnchorData.WatchedCount.Value = int.Parse(jObj["data"]["live_room"]["watched_show"]["num"]?.ToString());
+            Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "获取用户基本信息 : " + AnchorData.UserName.Value);
             //直播间人数，点赞数，人气等信息通过接收 ws 的消息获取
 
             //连接到直播间
