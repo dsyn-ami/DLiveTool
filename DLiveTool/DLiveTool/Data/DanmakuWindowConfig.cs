@@ -13,6 +13,10 @@ namespace DLiveTool
     public class DanmakuWindowConfig
     {
         /// <summary>
+        /// 总是显示在最上层
+        /// </summary>
+        public bool IsAlwaysTop = false;
+        /// <summary>
         /// 最大显示消息数量
         /// </summary>
         public int MaxItemCount = 30;

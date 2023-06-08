@@ -159,7 +159,6 @@ namespace DLiveTool
                 _operation = (Operation)BitConverter.ToInt32(bytes, 8);
                 _sequenceId = BitConverter.ToInt32(bytes, 12);
             }
-            
         }
 
         /// <summary>

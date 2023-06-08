@@ -41,7 +41,7 @@ namespace DLiveTool
             {
                 _avoidKeyListBox.Items.Add(avoidKey);
             }
-
+            _alwaysTopCheckBox.IsChecked = _config.IsAlwaysTop;
             _fontSizeInput.Text = _config.FontSize.ToString();
             _linePaddingInput.Text = _config.LinePadding.ToString();
             _maxItemCountInput.Text = _config.MaxItemCount.ToString();
@@ -58,7 +58,8 @@ namespace DLiveTool
             if(_curDanmakuWindow == null)
             {
                 _curDanmakuWindow = new DanmakuWindow();
-                _curDanmakuWindow.Owner = Application.Current.MainWindow;
+                //_curDanmakuWindow.Owner = Application.Current.MainWindow;
+                _curDanmakuWindow.Topmost = _config.IsAlwaysTop;
                 _curDanmakuWindow.Show();
                 _openBtn.Content = "关闭弹幕窗口";
             }
@@ -198,5 +199,25 @@ namespace DLiveTool
             }
         }
         #endregion
+
+        private void OnAlwaysTopChecked(object sender, RoutedEventArgs e)
+        {
+            _config.IsAlwaysTop = true;
+            ConfigDataMgr.Instance.SaveData();
+            if (_curDanmakuWindow != null)
+            {
+                _curDanmakuWindow.Topmost = true;
+            }
+        }
+
+        private void OnAlwaysTopUnChecked(object sender, RoutedEventArgs e)
+        {
+            _config.IsAlwaysTop = false;
+            ConfigDataMgr.Instance.SaveData();
+            if (_curDanmakuWindow != null)
+            {
+                _curDanmakuWindow.Topmost = false;
+            }
+        }
     }
 }

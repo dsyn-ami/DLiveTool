@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:DLiveTool"
         mc:Ignorable="d"
         Title="Danmaku" Height="600" Width="450"
-        WindowStyle="None" AllowsTransparency="true" Background="Transparent" MouseLeftButtonDown="OnMouseLeftBtnDown">
+        WindowStyle="None" AllowsTransparency="true" Background="Transparent" MouseLeftButtonDown="OnMouseLeftBtnDown"
+        Topmost="True">
     <Window.Resources>
         <SolidColorBrush x:Key="bgBrush" Color="Black"/>
     </Window.Resources>

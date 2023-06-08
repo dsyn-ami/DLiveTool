@@ -115,12 +115,6 @@ namespace DLiveTool
             while (_ws != null && _ws.State == WebSocketState.Open) //发送心跳包保持连接
             {
                 byte[] beatHeartData = Packet.HeatBeat.ToBytes();
-                string s = "";
-                foreach (byte b in beatHeartData)
-                {
-                    s += (" " + b.ToString());
-                }
-                Console.WriteLine(s);
 
                 try
                 {
@@ -240,7 +234,7 @@ namespace DLiveTool
                 //收到弹幕
                 case "DANMU_MSG":
                     ReceiveDanmakuMsg receiveDanmakuMsg = new ReceiveDanmakuMsg(json);
-                    BiliMsgWriter.RecordJson(receiveDanmakuMsg.Message, json);
+                    //BiliMsgWriter.RecordJson(receiveDanmakuMsg.Message, json);
                     OnReceiveDanmaku?.Invoke(receiveDanmakuMsg);
                     break;
                 //收到礼物

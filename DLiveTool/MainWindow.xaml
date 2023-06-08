@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DLiveTool"
         mc:Ignorable="d"
-        Title="DLiveTool" Height="520" Width="784">
+        Title="DLiveTool" Height="520" Width="784"
+        Closed="OnMainWindowClosed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>

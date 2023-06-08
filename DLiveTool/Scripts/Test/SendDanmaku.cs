@@ -21,7 +21,7 @@ namespace Server.TestBiliDanmaku
             dict["roomid"] = "8804378";
             dict["csrf"] = "";
             dict["csrf_token"] = "";
-            dict["rnd"] = "56846425472";
+            dict["rnd"] = "56846425472";//时间戳
             dict["color"] = "16777215";
             dict["fontsize"] = "25";
             FormUrlEncodedContent content = new FormUrlEncodedContent(dict);

@@ -153,5 +153,10 @@ namespace DLiveTool
         {
             contentItem.Content = value;
         }
+
+        private void OnMainWindowClosed(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }
