@@ -156,6 +156,7 @@ namespace DLiveTool
 
         private void OnMainWindowClosed(object sender, EventArgs e)
         {
+            DConnection.BiliWS.DisConnect();
             Environment.Exit(0);
         }
     }

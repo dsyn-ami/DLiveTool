@@ -11,13 +11,14 @@
         Topmost="True">
     <Window.Resources>
         <SolidColorBrush x:Key="bgBrush" Color="Black"/>
+        <SolidColorBrush x:Key="itemBgBrush" Color="Transparent"/>
     </Window.Resources>
     <Grid Background="{DynamicResource ResourceKey=bgBrush}">
         <StackPanel x:Name="_mainPanel" Background="Transparent" VerticalAlignment="Bottom" FlowDirection="LeftToRight" RenderTransformOrigin="0.5,0.5">
             <StackPanel.RenderTransform>
                 <TranslateTransform x:Name="rootTrans"/>
             </StackPanel.RenderTransform>
-            <!--<RichTextBox Background="Transparent" BorderThickness="0">
+            <!--<RichTextBox Background="{DynamicResource ResourceKey=itemBgBrush}" BorderThickness="0">
                 <FlowDocument FontSize="25" Foreground="Black" Background="Transparent">
                     <Paragraph LineHeight="25" Foreground="Black" Background="Transparent" TextAlignment="Justify">
                         <Run Foreground="Red" xml:space="preserve" Text="名字"/><Run Text=" "/><Run Foreground="Black" Text="测试测试文字测试测试文字测试测试文字"/><Run Text=" "/>

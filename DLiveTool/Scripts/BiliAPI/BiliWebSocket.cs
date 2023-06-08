@@ -8,6 +8,7 @@ using System.Text;
 using DLiveTool.Data;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace DLiveTool
 {
@@ -126,7 +127,6 @@ namespace DLiveTool
                     _ws = null;
                     return;
                 }
-                Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "发送心跳数据包：");
                 await Task.Delay(30 * 1000);
             }
             Console.WriteLine("心跳中断");
@@ -166,8 +166,6 @@ namespace DLiveTool
                     Array.Copy(buffer, 0, realData, realLength, result.Count);
                     realLength += result.Count;
                 }
-
-                Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "receive data" + realData.Take(realLength).Count());
                 //处理接收到的消息
                 HandleReceiveData(realData.Take(realLength).ToArray());
             }
@@ -206,7 +204,6 @@ namespace DLiveTool
                 {
                     byte[] decompressedData = Brotli.DecompressBuffer(packet.Body, 0, packet.Body.Length);
 
-                    Console.WriteLine("decompression Length : " + decompressedData.Length);
                     HandleReceiveData(decompressedData);
                 }
                 //子包第一位索引移动到下一个子包位置，
@@ -220,9 +217,6 @@ namespace DLiveTool
         /// <param name="json"></param>
         private void HandleDecodedJson(string json)
         {
-            Console.WriteLine($"收到消息 : " + json);
-            Console.WriteLine("");
-
             ReceiveMsg msg = new ReceiveMsg(json);
             switch (msg.CMD)
             {

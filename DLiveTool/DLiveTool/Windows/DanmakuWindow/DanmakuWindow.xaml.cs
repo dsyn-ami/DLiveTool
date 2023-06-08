@@ -36,10 +36,11 @@ namespace DLiveTool
 
             SetBackgroundColor(Color.FromArgb(_config.BGColorA, _config.BGColorR, _config.BGColorG, _config.BGColorB));
 
-            DConnection.BiliWS.OnReceiveDanmaku += AddMsgToQueue;
-            DConnection.BiliWS.OnUserEnter += AddMsgToQueue;
-            DConnection.BiliWS.OnReceiveGift += AddMsgToQueue;
+            DConnection.BiliWS.OnReceiveDanmaku += OnReceiveDanmaku;
+            DConnection.BiliWS.OnUserEnter += OnUserEnter;
+            DConnection.BiliWS.OnReceiveGift += OnReceiveGift;
         }
+
         /// <summary>
         /// 设置背景颜色
         /// </summary>
@@ -48,6 +49,17 @@ namespace DLiveTool
         {
             (Resources["bgBrush"] as SolidColorBrush).Color = color;
         }
+
+        #region 已弃用 弹幕动画
+        /// <summary>
+        /// 是否正在播放显示弹幕的动画
+        /// </summary>
+        bool _isAniming = false;
+        DoubleAnimation _anim = new DoubleAnimation();
+        /// <summary>
+        /// 待显示的弹幕消息队列
+        /// </summary>
+        Queue<IBiliMsg> _msgQueue = new Queue<IBiliMsg>();
 
         private void Anim_Completed(object sender, EventArgs e)
         {
@@ -68,8 +80,13 @@ namespace DLiveTool
         /// <param name="msgData"></param>
         private void AddMsgToQueue(IBiliMsg msgData)
         {
-            _msgQueue.Enqueue(msgData);
+            if (msgData is ReceiveDanmakuMsg)
+            {
+                var data = msgData as ReceiveDanmakuMsg;
+                Console.WriteLine($"{data.UserName} : {data.Message}");
+            }
 
+            _msgQueue.Enqueue(msgData);
             if (!_isAniming)
             {
                 var data = _msgQueue.Dequeue();
@@ -94,17 +111,27 @@ namespace DLiveTool
                 ShowReceiveGiftInfo(msg as ReceiveSendGift);
             }
         }
+        #endregion
+
+        #region 弹幕监听事件
+        private void OnReceiveGift(ReceiveSendGift msgData)
+        {
+            ShowReceiveGiftInfo(msgData);
+        }
+
+        private void OnUserEnter(ReceiveInterAct msgData)
+        {
+            ShowEnterInfo(msgData);
+        }
+
+        private void OnReceiveDanmaku(ReceiveDanmakuMsg msgData)
+        {
+            ShowDanmakuMsgAsync(msgData);
+        }
+        #endregion
 
         #region 弹幕消息显示到窗口
-        /// <summary>
-        /// 是否正在播放显示弹幕的动画
-        /// </summary>
-        bool _isAniming = false;
-        DoubleAnimation _anim = new DoubleAnimation();
-        /// <summary>
-        /// 待显示的弹幕消息队列
-        /// </summary>
-        Queue<IBiliMsg> _msgQueue = new Queue<IBiliMsg>();
+
         /// <summary>
         /// 展示一条弹幕消息
         /// </summary>
@@ -175,11 +202,11 @@ namespace DLiveTool
             flowDocument.Blocks.Add(para);
 
             RichTextBox box = new RichTextBox();
-            //关闭边框
+            box.Background = Resources["itemBgBrush"] as SolidColorBrush;
+            //关闭边框                  itemBgBrush
             box.BorderThickness = new Thickness(0);
             //FlowDocument 加到 RichTexBox子结点上
             box.Document = flowDocument;
-            box.Background = Brushes.Transparent;
             box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
             box.IsReadOnly = true;
             //添加到父节点上
@@ -187,16 +214,15 @@ namespace DLiveTool
 
             //保存到数据结构中
             _model.AddRichTexBox(box);
-
             
-            box.Loaded += (s, e) =>
-            {
-                //组件加载完成后播放动画
-                _anim.From = box.ActualHeight + _config.LinePadding;
-                _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(150);
-                rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
-            };
+            //box.Loaded += (s, e) =>
+            //{
+            //    //组件加载完成后播放动画
+            //    _anim.From = box.ActualHeight + _config.LinePadding;
+            //    _anim.To = 0;
+            //    _anim.Duration = TimeSpan.FromMilliseconds(150);
+            //    rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
+            //};
         }
         /// <summary>
         /// 显示弹幕表情
@@ -231,12 +257,12 @@ namespace DLiveTool
             flowDocument.Blocks.Add(para);
 
             RichTextBox box = new RichTextBox();
+            box.Background = Resources["itemBgBrush"] as SolidColorBrush;
             //关闭边框
             box.BorderThickness = new Thickness(0);
             //FlowDocument 加到 RichTexBox子结点上
             box.Document = flowDocument;
             box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
-            box.Background = Brushes.Transparent;
             box.IsReadOnly = true;
             //添加到父节点上
             _mainPanel.Children.Add(box);
@@ -245,14 +271,14 @@ namespace DLiveTool
             _model.AddRichTexBox(box);
 
 
-            box.Loaded += (s, e) =>
-            {
-                //组件加载完成后播放动画
-                _anim.From = box.ActualHeight + _config.LinePadding;
-                _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(_config.RollAnimTime);
-                rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
-            };
+            //box.Loaded += (s, e) =>
+            //{
+            //    //组件加载完成后播放动画
+            //    _anim.From = box.ActualHeight + _config.LinePadding;
+            //    _anim.To = 0;
+            //    _anim.Duration = TimeSpan.FromMilliseconds(_config.RollAnimTime);
+            //    rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
+            //};
         }
 
         /// <summary>
@@ -304,11 +330,11 @@ namespace DLiveTool
             flowDocument.Blocks.Add(para);
 
             RichTextBox box = new RichTextBox();
+            box.Background = Resources["itemBgBrush"] as SolidColorBrush;
             //关闭边框
             box.BorderThickness = new Thickness(0);
             //FlowDocument 加到 RichTexBox子结点上
             box.Document = flowDocument;
-            box.Background = Brushes.Transparent;
             box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
             box.IsReadOnly = true;
             //添加到父节点上
@@ -318,14 +344,14 @@ namespace DLiveTool
             _model.AddRichTexBox(box);
 
 
-            box.Loaded += (s, e) =>
-            {
-                //组件加载完成后播放动画
-                _anim.From = box.ActualHeight + _config.LinePadding;
-                _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(_config.RollAnimTime);
-                rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
-            };
+            //box.Loaded += (s, e) =>
+            //{
+            //    //组件加载完成后播放动画
+            //    _anim.From = box.ActualHeight + _config.LinePadding;
+            //    _anim.To = 0;
+            //    _anim.Duration = TimeSpan.FromMilliseconds(_config.RollAnimTime);
+            //    rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
+            //};
         }
         /// <summary>
         /// 显示收到的礼物
@@ -367,11 +393,11 @@ namespace DLiveTool
             flowDocument.Blocks.Add(para);
 
             RichTextBox box = new RichTextBox();
+            box.Background = Resources["itemBgBrush"] as SolidColorBrush;
             //关闭边框
             box.BorderThickness = new Thickness(0);
             //FlowDocument 加到 RichTexBox子结点上
             box.Document = flowDocument;
-            box.Background = Brushes.Transparent;
             box.Margin = new Thickness(0, 0, 0, _config.LinePadding);
             box.IsReadOnly = true;
             //添加到父节点上
@@ -380,14 +406,14 @@ namespace DLiveTool
             //保存到数据结构中
             _model.AddRichTexBox(box);
 
-            box.Loaded += (s, e) =>
-            {
-                //组件加载完成后播放动画
-                _anim.From = box.ActualHeight + _config.LinePadding;
-                _anim.To = 0;
-                _anim.Duration = TimeSpan.FromMilliseconds(_config.RollAnimTime);
-                rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
-            };
+            //box.Loaded += (s, e) =>
+            //{
+            //    //组件加载完成后播放动画
+            //    _anim.From = box.ActualHeight + _config.LinePadding;
+            //    _anim.To = 0;
+            //    _anim.Duration = TimeSpan.FromMilliseconds(_config.RollAnimTime);
+            //    rootTrans.BeginAnimation(TranslateTransform.YProperty, _anim);
+            //};
         }
         #endregion
 
