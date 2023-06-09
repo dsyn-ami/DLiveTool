@@ -8,7 +8,7 @@
       d:DesignHeight="375" d:DesignWidth="650"
       Title="DanmakuWindowSettingPage">
 
-    <Grid Background="Transparent">
+    <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="12"/>
             <RowDefinition Height="25"/>
@@ -55,6 +55,9 @@
             <StackPanel Orientation="Horizontal">
                 <Label>背景颜色</Label>
                 <local:ColorControlBtn x:Name="_backgroundColor" Height="20" Width="30"/>
+                <Border Width="20"/>
+                <Label>消息背景颜色</Label>
+                <local:ColorControlBtn x:Name="_msgBGColor" Height="20" Width="30"/>
             </StackPanel>
             
         </StackPanel>

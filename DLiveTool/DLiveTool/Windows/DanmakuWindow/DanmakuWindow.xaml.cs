@@ -35,7 +35,7 @@ namespace DLiveTool
             _anim.Completed += Anim_Completed;
 
             SetBackgroundColor(Color.FromArgb(_config.BGColorA, _config.BGColorR, _config.BGColorG, _config.BGColorB));
-
+            SetMsgBGColor(Color.FromArgb(_config.MsgBGColorA, _config.MsgBGColorR, _config.MsgBGColorG, _config.MsgBGColorB));
             DConnection.BiliWS.OnReceiveDanmaku += OnReceiveDanmaku;
             DConnection.BiliWS.OnUserEnter += OnUserEnter;
             DConnection.BiliWS.OnReceiveGift += OnReceiveGift;
@@ -48,6 +48,14 @@ namespace DLiveTool
         public void SetBackgroundColor(Color color)
         {
             (Resources["bgBrush"] as SolidColorBrush).Color = color;
+        }
+        /// <summary>
+        /// 设置消息背景颜色
+        /// </summary>
+        /// <param name="color"></param>
+        public void SetMsgBGColor(Color color)
+        {
+            (Resources["msgBgBrush"] as SolidColorBrush).Color = color;
         }
 
         #region 已弃用 弹幕动画
@@ -202,7 +210,7 @@ namespace DLiveTool
             flowDocument.Blocks.Add(para);
 
             RichTextBox box = new RichTextBox();
-            box.Background = Resources["itemBgBrush"] as SolidColorBrush;
+            box.Background = Resources["msgBgBrush"] as SolidColorBrush;
             //关闭边框                  itemBgBrush
             box.BorderThickness = new Thickness(0);
             //FlowDocument 加到 RichTexBox子结点上
@@ -257,7 +265,7 @@ namespace DLiveTool
             flowDocument.Blocks.Add(para);
 
             RichTextBox box = new RichTextBox();
-            box.Background = Resources["itemBgBrush"] as SolidColorBrush;
+            box.Background = Resources["msgBgBrush"] as SolidColorBrush;
             //关闭边框
             box.BorderThickness = new Thickness(0);
             //FlowDocument 加到 RichTexBox子结点上
@@ -330,7 +338,7 @@ namespace DLiveTool
             flowDocument.Blocks.Add(para);
 
             RichTextBox box = new RichTextBox();
-            box.Background = Resources["itemBgBrush"] as SolidColorBrush;
+            box.Background = Resources["msgBgBrush"] as SolidColorBrush;
             //关闭边框
             box.BorderThickness = new Thickness(0);
             //FlowDocument 加到 RichTexBox子结点上
@@ -393,7 +401,7 @@ namespace DLiveTool
             flowDocument.Blocks.Add(para);
 
             RichTextBox box = new RichTextBox();
-            box.Background = Resources["itemBgBrush"] as SolidColorBrush;
+            box.Background = Resources["msgBgBrush"] as SolidColorBrush;
             //关闭边框
             box.BorderThickness = new Thickness(0);
             //FlowDocument 加到 RichTexBox子结点上

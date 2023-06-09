@@ -50,5 +50,11 @@ namespace DLiveTool
         public byte BGColorR;
         public byte BGColorG;
         public byte BGColorB;
+
+        //消息背景颜色
+        public byte MsgBGColorA;
+        public byte MsgBGColorR;
+        public byte MsgBGColorG;
+        public byte MsgBGColorB;
     }
 }

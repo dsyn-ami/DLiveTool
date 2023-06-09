@@ -30,6 +30,8 @@ namespace DLiveTool
 
             _backgroundColor.OnColorChanged += OnBackgroundColorChanged;
             _backgroundColor.OnPanelClosed += OnBackgroundColorConfirm;
+            _msgBGColor.OnColorChanged += OnMsgBGColorChanged;
+            _msgBGColor.OnPanelClosed += OnMsgBGColorConfirm;
         }
 
         private void Refresh()
@@ -49,6 +51,7 @@ namespace DLiveTool
             _itemAliveTimeInput.Text = _config.ItemAliveTime.ToString();
 
             _backgroundColor.SetColor(_config.BGColorA, _config.BGColorR, _config.BGColorG, _config.BGColorB);
+            _msgBGColor.SetColor(_config.MsgBGColorA, _config.MsgBGColorR, _config.MsgBGColorG, _config.MsgBGColorB);
         }
 
         #region 控件事件
@@ -196,6 +199,22 @@ namespace DLiveTool
             if(_curDanmakuWindow != null)
             {
                 _curDanmakuWindow.SetBackgroundColor(obj);
+            }
+        }
+        private void OnMsgBGColorConfirm(Color obj)
+        {
+            ConfigDataMgr.Instance.SaveData();
+        }
+
+        private void OnMsgBGColorChanged(Color obj)
+        {
+            _config.MsgBGColorA = obj.A;
+            _config.MsgBGColorR = obj.R;
+            _config.MsgBGColorG = obj.G;
+            _config.MsgBGColorB = obj.B;
+            if (_curDanmakuWindow != null)
+            {
+                _curDanmakuWindow.SetMsgBGColor(obj);
             }
         }
         #endregion
