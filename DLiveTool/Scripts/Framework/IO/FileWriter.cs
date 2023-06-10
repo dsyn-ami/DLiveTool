@@ -67,7 +67,7 @@ namespace dsyn
             }
             catch (Exception e)
             {
-                Console.WriteLine("WriteFile Error" + e);
+                Console.WriteLine("WriteFile Error : " + e);
                 return false;
             }
             return true;
