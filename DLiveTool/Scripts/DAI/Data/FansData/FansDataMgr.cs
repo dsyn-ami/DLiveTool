@@ -18,6 +18,43 @@ namespace DAI
             Init();
         }
         #region 公开函数
+        /// <summary>
+        /// 增加亲密度
+        /// </summary>
+        /// <param name="value"></param>
+        public void AddFansIntimacy(string uid, string userName, long value)
+        {
+            Fans fans = _fansDatas.Fans.Find(x => x.UID.Equals(uid));
+            if(fans == null)
+            {
+                fans = new Fans();
+                fans.UID = uid;
+                fans.Name = userName;
+                fans.Intimacy = value;
+                _fansDatas.Fans.Add(fans);
+            }
+            else
+            {
+                fans.Name = userName;
+                fans.Intimacy += value;
+            }
+            SaveData();
+        }
+        public long GetFansIntimacy(string uid, string userName)
+        {
+            Fans fans = _fansDatas.Fans.Find(x => x.UID.Equals(uid));
+            if (fans == null)
+            {
+                fans = new Fans();
+                fans.UID = uid;
+                fans.Name = userName;
+                fans.Intimacy = 0;
+                _fansDatas.Fans.Add(fans);
+                SaveData();
+            }
+            return fans.Intimacy;
+        }
+
 
         public void SaveData()
         {

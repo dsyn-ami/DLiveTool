@@ -46,5 +46,19 @@ namespace DLiveTool
         /// 获取导航栏用户信息, 响应数据包含用于计算 wbi签名 的实时口令 : data/wbi_img
         /// </summary>
         public const string NavInfo = "https://api.bilibili.com/x/web-interface/nav";
+        /// <summary>
+        /// 发送弹幕
+        /// POST
+        /// msg : 弹幕内容
+        /// roomid : 房间号
+        /// csrf : 
+        /// csrf_token : 
+        /// rnd : 时间戳
+        /// color : 16777215
+        /// fontsize : 25
+        /// [Header]cookie : 登录验证信息
+        /// 
+        /// </summary>
+        public const string SendDanmaku = "https://api.live.bilibili.com/msg/send";
     }
 }

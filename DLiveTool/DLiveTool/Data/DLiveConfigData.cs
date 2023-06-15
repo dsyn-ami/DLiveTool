@@ -16,8 +16,13 @@ namespace DLiveTool
         /// 记录上一次连接的房间id
         /// </summary>
         public string RoomId;
-
+        /// <summary>
+        /// 弹幕窗口相关配置
+        /// </summary>
         public DanmakuWindowConfig DanmakuWindowConfig = new DanmakuWindowConfig();
-
+        /// <summary>
+        /// DAI相关配置
+        /// </summary>
+        public DAIConfig DAIConfig = new DAIConfig();
     }
 }

@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="DLiveTool" Height="520" Width="784"
         Closed="OnMainWindowClosed">
+    <Window.Resources>
+        <SolidColorBrush x:Key="_toggleSelectColor" Color="LightBlue"/>
+        <SolidColorBrush x:Key="_toggleNormalColor" Color="Transparent"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
@@ -55,19 +59,19 @@
             <!--toggle区域-->
             <StackPanel>
                 <Border Height="20"/>
-                <Border x:Name="_toggleBoderDanmaku" CornerRadius="10,0,0,10"  Height="40" Margin="3, 0, -8, 0" Background="LightBlue">
-                    <Button Background="Transparent" Content="弹幕窗口" BorderThickness="0"/>
+                <Border x:Name="_toggleBoderDanmaku" CornerRadius="10,0,0,10"  Height="40" Background="AliceBlue" Margin="3, 0, -8, 0" >
+                    <Button x:Name="_danmakuToggleBtn" Click="OnDanmakuToggleBtnClick" Background="Transparent" Content="弹幕窗口" BorderThickness="0"/>
                 </Border>
-                <Border x:Name="_toggleBoder1" CornerRadius="5"  Height="40" Margin="3, 0, 3, 0">
-                    <Button Background="Transparent" Content="其他设置" BorderThickness="0"/>
+                <Border x:Name="_toggleBoderDAI" CornerRadius="10,0,0,10" Height="40" Margin="3, 0, -8, 0">
+                    <Button x:Name="_daiToggleBtn" Click="OnDAIToggleBtnClick" Background="Transparent" Content="DAI" BorderThickness="0"/>
                 </Border>
-                <Border x:Name="_toggleBorder2" CornerRadius="5"  Height="40" Margin="3, 0, 3, 0">
-                    <Button Background="Transparent" Content="别的设置" BorderThickness="0"/>
+                <Border x:Name="_toggleBorderConsole" CornerRadius="10,0,0,10" Height="40" Margin="3, 0, -8, 0">
+                    <Button x:Name="_consoleToggleBtn" Click="OnConsoleToggleBtnClick" Background="Transparent" Content="控制台" BorderThickness="0"/>
                 </Border>
             </StackPanel>
             <!--显示子面板区域-->
             <Border Grid.Column="2" Background="LightBlue" CornerRadius="10" Margin="5">
-                <Frame x:Name="_mainContent"/>
+                <Frame x:Name="_mainContent" NavigationUIVisibility="Hidden" />
             </Border>
         </Grid>
     </Grid>

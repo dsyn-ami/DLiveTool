@@ -30,17 +30,24 @@ namespace DAI
 
         public string GetRandomMsg(string userName, long initmacy)
         {
-            Random rand = new Random();
-
-            string msg = _chatMsg_100[rand.Next(0, _chatMsg_100.Count)];
-            int msgCount = msg.Length - _userName.Length;
-            int maxNameLength = 20 - msgCount;
-            if(userName.Length > maxNameLength)
+            if(initmacy >= 100)
             {
-                userName = userName.Substring(0, maxNameLength);
+                Random rand = new Random();
+
+                string msg = _chatMsg_100[rand.Next(0, _chatMsg_100.Count)];
+                int msgCount = msg.Length - _userName.Length;
+                int maxNameLength = 20 - msgCount;
+                if (userName.Length > maxNameLength)
+                {
+                    userName = userName.Substring(0, maxNameLength);
+                }
+                msg.Replace(_userName, userName);
+                return msg;
             }
-            msg.Replace(_userName, userName);
-            return msg;
+            else
+            {
+                return null;
+            }
         }
     }
 }

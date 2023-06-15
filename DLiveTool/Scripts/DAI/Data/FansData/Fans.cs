@@ -20,7 +20,7 @@ namespace DAI
         /// <summary>
         /// 亲密度
         /// </summary>
-        public double Intimacy { get; set; }
+        public long Intimacy { get; set; }
     }
     [Serializable]
     public class FansDatas

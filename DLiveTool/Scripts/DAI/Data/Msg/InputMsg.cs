@@ -24,6 +24,14 @@ namespace DAI
         /// </summary>
         public string Msg { get; set; }
         /// <summary>
+        /// 输入消息的UID, 控制台输入的话为当前连接直播间UID或为空(未连接)
+        /// </summary>
+        public string UID { get; set; }
+        /// <summary>
+        /// 输入消息的用户名字
+        /// </summary>
+        public string UserName { get; set; }
+        /// <summary>
         /// 输入来源
         /// </summary>
         public byte InputType { get; set; }

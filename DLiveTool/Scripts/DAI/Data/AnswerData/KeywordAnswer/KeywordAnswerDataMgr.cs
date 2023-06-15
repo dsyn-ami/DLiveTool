@@ -54,6 +54,20 @@ namespace DAI
             }
             SaveData();
         }
+        public bool RemoveKeyword(string keyword)
+        {
+            KeywordAnswer ka = _data.KeywordAnswer.Find(x => x.Keyword.Equals(keyword));
+            if(ka != null)
+            {
+                _data.KeywordAnswer.Remove(ka);
+                SaveData();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public void SaveData()
         {
             if (_data != null)

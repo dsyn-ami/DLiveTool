@@ -10,6 +10,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using dsyn;
+using System.Text.RegularExpressions;
+using DLiveTool.Data;
 
 namespace DLiveTool
 {
@@ -30,6 +32,10 @@ namespace DLiveTool
         /// 通过nav请求返回的实时口令动态生成的混合密钥
         /// </summary>
         private static string _mixinKey;
+        /// <summary>
+        /// 用于发送http请求的客户端
+        /// </summary>
+        static HttpClient _client = new HttpClient();
         #endregion
 
         #region 公开函数
@@ -82,6 +88,43 @@ namespace DLiveTool
             request.KeepAlive = false;
             HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
             return response;
+        }
+
+        static Dictionary<string, string> _postDataDict = new Dictionary<string, string>();
+        /// <summary>
+        /// 在已连接房间发送弹幕
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="callback">发送完回调 bool 是否发送成功</param>
+        public static async void SendDanmakuAsync(string msg, Action<bool> callback = null)
+        {
+            string roomId = AnchorData.RoomId.Value;
+            string cookie = ConfigDataMgr.Instance.Data.DAIConfig.Cookie.ToString();
+            //csrf 就是在 cookie 中的 bili_jct 的值
+            string csrf = ConfigDataMgr.Instance.Data.DAIConfig.InCookie_csrf;
+            if (string.IsNullOrEmpty(cookie) || string.IsNullOrEmpty(roomId))
+            {
+                Console.WriteLine("发送弹幕失败, cookie或房间号为空");
+                return;
+            }
+            _postDataDict.Clear();
+            _postDataDict["bubble"] = "0";
+            _postDataDict["msg"] = msg;
+            _postDataDict["mode"] = "1";
+            _postDataDict["roomid"] = roomId;
+            _postDataDict["csrf"] = csrf;
+            _postDataDict["csrf_token"] = csrf;
+            _postDataDict["rnd"] = Time.GetTimeStamp().ToString();
+            _postDataDict["color"] = "16777215";
+            _postDataDict["fontsize"] = "25";
+            FormUrlEncodedContent content = new FormUrlEncodedContent(_postDataDict);
+            content.Headers.Add("cookie", cookie);
+            HttpResponseMessage response = await _client.PostAsync(BiliAPI.SendDanmaku, content);
+            string responseStr = await response.Content.ReadAsStringAsync();
+            SendDanmakuResponse res = new SendDanmakuResponse(responseStr);
+            Console.WriteLine($"[{msg}] 发送{(res.Code == 0 ? "成功" : "失败")} {res.ErrorMsg}");
+            response.Dispose();
+            callback?.Invoke(res.Code == 0);
         }
         #endregion
 

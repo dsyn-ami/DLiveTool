@@ -26,83 +26,37 @@ namespace DLiveTool
     public partial class MainWindow : Window
     {
         DanmakuWindowSettingPage _danmakuSettingPage;
+        DAISettingPage _daiSettingPage;
+
+        DAISystem _daiSystem;
+
+        #region 初始化
         public MainWindow()
         {
             InitializeComponent();
             //初始化缓存
             DCache.Init();
-            //初始化子页面
-            _danmakuSettingPage = new DanmakuWindowSettingPage();
-
             //刷新窗口
             Refresh();
+            //DAI初始化
+            _daiSystem = new DAISystem();
+            _daiSystem.Init();
         }
 
         private void Refresh()
         {
             var data = ConfigDataMgr.Instance.Data;
             _roomIdInput.Text = data.RoomId;
+            //初始化子页面
+            _danmakuSettingPage = new DanmakuWindowSettingPage();
             //设置子Page
             _mainContent.Content = _danmakuSettingPage;
+            //刷新侧边栏toggle
+            SetSelectedToggleColor(_toggleBoderDanmaku);
         }
+        #endregion
 
-        private void OnConnectBtnClick(object sender, RoutedEventArgs e)
-        {
-            string roomId = _roomIdInput.Text;
-            if (string.IsNullOrEmpty(roomId)) return;
-
-            
-            if (_connectBtn.Content.Equals("断开"))
-            {
-                _roomIdInput.IsEnabled = true;
-                _connectBtn.Content = "连接";
-                _connectBtn.IsEnabled = true;
-
-                _topPic.Source = null;
-                _headPicBrush.ImageSource = null;
-                UpdateText(_userName, "用户名");
-
-                DConnection.Disconnect();
-            }
-            else if(_connectBtn.Content.Equals("连接"))
-            {
-                _roomIdInput.IsEnabled = false;
-                _connectBtn.Content = "连接中";
-                _connectBtn.IsEnabled = false;
-                try
-                {
-                    DConnection.Connect(roomId, (code, msg) =>
-                    {
-                        if (code != 0)
-                        {
-                            MessageBox.Show(msg);
-                            _connectBtn.Content = "连接";
-                            _connectBtn.IsEnabled = true;
-                            _roomIdInput.IsEnabled = true;
-                            return;
-                        }
-
-                        _connectBtn.Content = "断开";
-                        _connectBtn.IsEnabled = true;
-                        UpdateImageAsync(_topPic, AnchorData.TopPhoto.Value);
-                        UpdateImageAsync(_headPicBrush, AnchorData.UserFace.Value);
-                        UpdateText(_userName, AnchorData.UserName.Value);
-
-                        //更新房间号
-                        ConfigDataMgr.Instance.Data.RoomId = roomId;
-                        ConfigDataMgr.Instance.SaveData();
-                    });
-                }
-                catch (Exception ex)
-                {
-                    _connectBtn.Content = "连接";
-                    _roomIdInput.IsEnabled = true;
-                    _connectBtn.IsEnabled = true;
-                    MessageBox.Show(ex.Message);
-                }
-            }
-            
-        }
+        #region 加载图片
 
         /// <summary>
         /// 替换指定Image的展示图片
@@ -143,7 +97,111 @@ namespace DLiveTool
                 DCache.AddImageCache(fileName, path);
             }
             return new BitmapImage(new Uri(path));
-        }        
+        }
+
+        #endregion
+
+        #region 控件事件
+        private void OnConnectBtnClick(object sender, RoutedEventArgs e)
+        {
+            string roomId = _roomIdInput.Text;
+            if (string.IsNullOrEmpty(roomId)) return;
+
+
+            if (_connectBtn.Content.Equals("断开"))
+            {
+                _roomIdInput.IsEnabled = true;
+                _connectBtn.Content = "连接";
+                _connectBtn.IsEnabled = true;
+
+                _topPic.Source = null;
+                _headPicBrush.ImageSource = null;
+                UpdateText(_userName, "用户名");
+
+                DConnection.Disconnect();
+            }
+            else if (_connectBtn.Content.Equals("连接"))
+            {
+                _roomIdInput.IsEnabled = false;
+                _connectBtn.Content = "连接中";
+                _connectBtn.IsEnabled = false;
+                try
+                {
+                    DConnection.Connect(roomId, (code, msg) =>
+                    {
+                        if (code != 0)
+                        {
+                            MessageBox.Show(msg);
+                            _connectBtn.Content = "连接";
+                            _connectBtn.IsEnabled = true;
+                            _roomIdInput.IsEnabled = true;
+                            return;
+                        }
+
+                        _connectBtn.Content = "断开";
+                        _connectBtn.IsEnabled = true;
+                        UpdateImageAsync(_topPic, AnchorData.TopPhoto.Value);
+                        UpdateImageAsync(_headPicBrush, AnchorData.UserFace.Value);
+                        UpdateText(_userName, AnchorData.UserName.Value);
+
+                        //更新房间号
+                        ConfigDataMgr.Instance.Data.RoomId = roomId;
+                        ConfigDataMgr.Instance.SaveData();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _connectBtn.Content = "连接";
+                    _roomIdInput.IsEnabled = true;
+                    _connectBtn.IsEnabled = true;
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+        }
+
+        private void OnMainWindowClosed(object sender, EventArgs e)
+        {
+            DConnection.BiliWS.DisConnect();
+            Environment.Exit(0);
+        }
+
+        private void OnDanmakuToggleBtnClick(object sender, RoutedEventArgs e)
+        {
+            if(_mainContent.Content != _danmakuSettingPage)
+            {
+                //刷新 Toggle
+                SetSelectedToggleColor(_toggleBoderDanmaku);
+                //刷新子页面
+                if(_danmakuSettingPage == null) _danmakuSettingPage = new DanmakuWindowSettingPage();
+                _mainContent.Content = _danmakuSettingPage;
+            }
+        }
+
+        private void OnDAIToggleBtnClick(object sender, RoutedEventArgs e)
+        {
+            if(_mainContent.Content != _daiSettingPage)
+            {
+                //刷新 Toggle
+                SetSelectedToggleColor(_toggleBoderDAI);
+                //刷新子页面
+                if(_daiSettingPage == null) _daiSettingPage = new DAISettingPage();
+                _mainContent.Content = _daiSettingPage;
+            }
+        }
+        #endregion
+
+        #region 其他函数
+        private void SetSelectedToggleColor(Border selectedBorder)
+        {
+            SolidColorBrush selectBrush = Resources["_toggleSelectColor"] as SolidColorBrush;
+            SolidColorBrush normalBrush = Resources["_toggleNormalColor"] as SolidColorBrush;
+
+            _toggleBoderDanmaku.Background = normalBrush;
+            _toggleBoderDAI.Background = normalBrush;
+            _toggleBorderConsole.Background = normalBrush;
+            selectedBorder.Background = selectBrush;
+        }
         /// <summary>
         /// 更新指定文本组件的文本
         /// </summary>
@@ -153,11 +211,12 @@ namespace DLiveTool
         {
             contentItem.Content = value;
         }
-
-        private void OnMainWindowClosed(object sender, EventArgs e)
+        private void OnConsoleToggleBtnClick(object sender, RoutedEventArgs e)
         {
-            DConnection.BiliWS.DisConnect();
-            Environment.Exit(0);
+
         }
+        #endregion
+
+
     }
 }
