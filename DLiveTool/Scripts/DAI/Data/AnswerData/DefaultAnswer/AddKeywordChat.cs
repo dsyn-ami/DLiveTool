@@ -13,17 +13,25 @@ namespace DAI
             "原来要这样回答呀, 学会了汪",
             "不知道这是什么, 总之先记下了汪",
             "学会了汪",
-            "要回答{answer}吗, 汪?",
-            "原来是{answer}呀汪",
             "学到新知识了汪, 开心汪",
             "你都在教我些什么呀汪",
             "是新知识汪",
             "要长脑子了汪, 要长脑子了汪汪",
             "这么复杂的东西是汪可以学的吗",
-            "没错, 是{answer}汪",
             "嗯, 我懂, 我懂汪",
             "难道, 我其实是天才吗汪",
+            "要回答{answer}吗, 汪?",
+            "原来是{answer}呀汪",
+            "没错, 是{answer}汪",
             "{userName}教的, 我会好好记住的汪",
+            "是{userName}的新知识汪!",
+            "谢谢{userName}, 学会了汪",
+            "太简单了汪, 有难点的吗, 就难一点汪",
+            "学会了, 这就去对线汪",
+            "{keyword}, 然后是{answer}汪",
+            "奇怪的知识增加了汪",
+            "原来如此, 学会了汪",
+            "谢谢{userName}老师的新知识汪",
         };
         string _userName = "{userName}";
         string _keyword = "{keyword}";
@@ -40,7 +48,7 @@ namespace DAI
             string msg = _chatMsg[index].Replace(_userName, userName).Replace(_keyword, keyword).Replace(_answer, answer);
             if (msg.Length <= 20) return msg;
             //前三条长度必定小于20
-            else return _chatMsg[random.Next(0, 4)].Replace(_userName, userName).Replace(_keyword, keyword).Replace(_answer, answer);
+            else return _chatMsg[random.Next(0, 10)].Replace(_userName, userName).Replace(_keyword, keyword).Replace(_answer, answer);
         }
     }
 }

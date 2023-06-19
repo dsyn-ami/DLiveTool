@@ -26,6 +26,12 @@ namespace DAI
             "嗅, 嗅, 发现礼物, 收下了汪",
             "汪! 是{giftName}, 汪汪汪!",
             "汪! 是礼物, 汪汪汪!",
+            "谢谢{userName}的礼物, 汪你",
+            "谢谢你的礼物, 汪你",
+            "汪才不喜欢{giftName}呢, 汪汪",
+            "汪才不喜欢这个呢, 汪汪",
+            "居然是{giftName}, 谢谢{userName}汪",
+            "居然是礼物, 谢谢你汪",
         };
         private string _userName = "{userName}";
         private string _giftName = "{giftName}";

@@ -16,7 +16,9 @@ namespace DAI
             "汪! {userName}来啦!",
             "欢迎{userName}汪",
             "欢迎{userName}, 汪上好汪",
-            "{userName}来啦汪, 欢迎欢迎",
+            "{userName}来啦汪, 欢迎汪",
+            "汪, 汪, 欢迎{userName}!",
+            "你好汪,{userName}",
         };
         private List<string> _chatMsg_300 = new List<string>
         {

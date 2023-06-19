@@ -11,6 +11,8 @@ namespace DAI
         List<string> _chatMsg = new List<string>
         {
             "{answer}",
+            "{answer}",
+            "{answer}!",
             "{answer}汪",
         };
         string _answer = "{answer}";

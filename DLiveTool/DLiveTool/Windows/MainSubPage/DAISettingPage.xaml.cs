@@ -81,7 +81,7 @@ namespace DLiveTool
             return new Regex("(?<=(bili_jct=))[.\\s\\S]*?(?=(;))", RegexOptions.Multiline | RegexOptions.Singleline).Match(cookie).Value;
         }
         /// <summary>
-        /// 在cookie中查找csrf值
+        /// 在cookie中查找UserId值
         /// </summary>
         /// <param name="cookie"></param>
         /// <returns></returns>
