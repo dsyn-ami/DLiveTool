@@ -86,7 +86,7 @@ namespace DLiveTool
         public void AddPlayInstance(string text)
         {
             //暂时关闭语音播报
-            return;
+            //return;
             //等待队列大于5，不再生成语音
             if (_playQueue.Count > 5) return;
 
@@ -96,7 +96,6 @@ namespace DLiveTool
                 var ins = _playQueue.Dequeue();
                 PlayInstance(ins);
             }
-            
         }
         /// <summary>
         /// 取出
@@ -111,7 +110,5 @@ namespace DLiveTool
             return null;
         }
         public int Count => _playQueue.Count;
-
-
     }
 }

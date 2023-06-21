@@ -145,6 +145,7 @@ namespace DLiveTool
                     if (isSuccess)
                     {
                         _sendDanmakuCd = 3;
+                        TtsPlayer.Instance.AddPlayInstance(msg);
                     }
                     else
                     {
